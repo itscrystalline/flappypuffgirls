@@ -10,7 +10,7 @@ public class Manager : MonoBehaviour
 {
   [SerializeField]
   private float playerBaseSpeed = 5;
-  public float playerJumpForce = 850;
+  public float playerJumpForce = 15;
 
   // State
   public double localDifficulty = 1.0;
@@ -39,13 +39,13 @@ public class Manager : MonoBehaviour
     }
     DontDestroyOnLoad(gameObject);
     INSTANCE = this;
+    reset = InputSystem.actions.FindAction("Reset");
   }
 
   void Start()
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
-      reset = InputSystem.actions.FindAction("Reset");
 
       var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
       var camera = Camera.main;
@@ -80,6 +80,7 @@ public class Manager : MonoBehaviour
     if (SceneManager.GetActiveScene().name == "Game")
     {
       localDifficulty += 0.1 * Time.deltaTime;
+      playerDistance += playerEffectiveSpeed() * Time.deltaTime;
     }
     if (reset.WasPerformedThisFrame())
     {
