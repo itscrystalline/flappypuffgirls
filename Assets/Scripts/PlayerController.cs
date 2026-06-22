@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
   {
     if (jump.WasPerformedThisFrame())
     {
-      rb.AddForceY(game.playerJumpForce);
+      rb.AddForceY(game.playerJumpForce, ForceMode2D.Impulse);
     }
   }
 }

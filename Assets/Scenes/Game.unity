@@ -695,7 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Manager
   playerBaseSpeed: 5
-  playerJumpForce: 850
+  playerJumpForce: 20
   localDifficulty: 1
   playerDistance: 0
 --- !u!4 &1156524150
@@ -877,6 +877,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1484155534249996142, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
+      propertyPath: m_Name
+      value: GreenPipe
+      objectReference: {fileID: 0}
     - target: {fileID: 4192272836404266716, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.5
@@ -916,10 +920,6 @@ PrefabInstance:
     - target: {fileID: 4192272836404266716, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1484155534249996142, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
-      propertyPath: m_Name
-      value: GreenPipe
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

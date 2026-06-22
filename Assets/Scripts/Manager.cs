@@ -1,21 +1,20 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
   [SerializeField]
-  private float playerBaseSpeed = 10;
+  private float playerBaseSpeed = 5;
   public float playerJumpForce = 850;
 
   // State
   public double localDifficulty = 1.0;
   public double playerDistance = 0.0;
-  private List<GameObject> pipes = new();
 
   public float playerEffectiveSpeed()
   {
@@ -29,6 +28,7 @@ public class Manager : MonoBehaviour
 
   [HideInInspector]
   public static Manager? INSTANCE = null;
+  private InputAction reset;
 
   void Awake()
   {
@@ -45,6 +45,8 @@ public class Manager : MonoBehaviour
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
+      reset = InputSystem.actions.FindAction("Reset");
+
       var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
       var camera = Camera.main;
       var viewportHeight = camera.orthographicSize;
@@ -70,8 +72,6 @@ public class Manager : MonoBehaviour
       wallColliders[2].size = SizeOf(top);
       wallColliders[3].offset = CentroidOf(bottom);
       wallColliders[3].size = SizeOf(bottom);
-
-      pipes.AddRange(GameObject.FindGameObjectsWithTag("Pipe"));
     }
   }
 
@@ -79,12 +79,11 @@ public class Manager : MonoBehaviour
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
-      foreach (var pipe in pipes)
-      {
-        var transform = pipe.transform.position;
-        transform.x -= playerEffectiveSpeed() * Time.deltaTime;
-        pipe.transform.position = transform;
-      }
+      localDifficulty += 0.1 * Time.deltaTime;
+    }
+    if (reset.WasPerformedThisFrame())
+    {
+      SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
   }
 
