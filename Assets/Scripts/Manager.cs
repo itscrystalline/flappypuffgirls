@@ -11,10 +11,12 @@ public class Manager : MonoBehaviour
   [SerializeField]
   private float playerBaseSpeed = 5;
   public float playerJumpForce = 15;
+  public bool noClip = false;
 
   // State
   public double localDifficulty = 1.0;
-  public double playerDistance = 0.0;
+  public float playerDistance = 0.0f;
+  public int pipesPassed = 0;
 
   public float playerEffectiveSpeed()
   {
@@ -28,7 +30,7 @@ public class Manager : MonoBehaviour
 
   [HideInInspector]
   public static Manager? INSTANCE = null;
-  private InputAction reset;
+  private InputAction? reset;
 
   void Awake()
   {
@@ -82,10 +84,15 @@ public class Manager : MonoBehaviour
       localDifficulty += 0.1 * Time.deltaTime;
       playerDistance += playerEffectiveSpeed() * Time.deltaTime;
     }
-    if (reset.WasPerformedThisFrame())
+    if (reset!.WasPerformedThisFrame())
     {
-      SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+      ResetGame();
     }
+  }
+
+  public void ResetGame()
+  {
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 
   Vector2 CentroidOf((Vector2, Vector2) vecs)
