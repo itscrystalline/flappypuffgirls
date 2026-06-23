@@ -117,6 +117,7 @@ public class Manager : MonoBehaviour
 
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
+    pipe.openingSize = Random.Range(1.0f, 4.0f);
     if (!lastPipe)
     {
       pipe.logicalPosition = viewportWidth;
