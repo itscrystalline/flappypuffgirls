@@ -11,8 +11,11 @@ public class Pipe : MonoBehaviour
   }
   void FixedUpdate()
   {
+    var dist = logicalPosition - game.playerDistance;
+    if (dist < -1000) Destroy(gameObject);
+
     var newTransform = transform.position;
-    newTransform.x = logicalPosition - game.playerDistance;
+    newTransform.x = dist;
     transform.position = newTransform;
   }
   void OnTriggerEnter2D()
