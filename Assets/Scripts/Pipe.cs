@@ -14,4 +14,8 @@ public class Pipe : MonoBehaviour
     newTransform.x -= game.playerEffectiveSpeed() * Time.deltaTime;
     transform.position = newTransform;
   }
+  void OnTriggerEnter2D()
+  {
+    game.pipesPassed += 1;
+  }
 }
