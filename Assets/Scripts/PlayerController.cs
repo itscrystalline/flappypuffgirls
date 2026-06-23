@@ -18,6 +18,12 @@ public class PlayerController : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    var velX = game.PlayerEffectiveSpeed();
+    var velY = rb.linearVelocityY;
+    var normLook = new Vector2(velX, velY).normalized;
+    var lookAngle = Mathf.Atan2(normLook.y, normLook.x) * Mathf.Rad2Deg;
+    transform.rotation = Quaternion.Euler(0, 0, lookAngle - 90);
+
     if (jump.WasPerformedThisFrame())
     {
       rb.linearVelocity = new Vector2(0, game.playerJumpForce);
