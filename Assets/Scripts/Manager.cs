@@ -76,16 +76,19 @@ public class Manager : MonoBehaviour
     }
   }
 
+  void Update()
+  {
+    if (reset!.WasPerformedThisFrame())
+    {
+      ResetGame();
+    }
+  }
   void FixedUpdate()
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
       localDifficulty += 0.1 * Time.deltaTime;
       playerDistance += PlayerEffectiveSpeed() * Time.deltaTime;
-    }
-    if (reset!.WasPerformedThisFrame())
-    {
-      ResetGame();
     }
   }
 
