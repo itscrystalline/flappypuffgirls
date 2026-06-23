@@ -11,8 +11,8 @@ public class PipeKill : MonoBehaviour
     if (game.noClip)
     {
       var collider = GetComponent<BoxCollider2D>();
-      collider.includeLayers = 0;
-      collider.excludeLayers = LayerMask.GetMask("Everything");
+      collider.includeLayers = (LayerMask)0;
+      collider.excludeLayers = (LayerMask)0b11111111_11111111_1111111_11111111;
     }
   }
   void OnCollisionEnter2D(Collision2D col)
