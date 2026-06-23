@@ -2,17 +2,11 @@ using UnityEngine;
 
 public class Pipe : MonoBehaviour
 {
-  private Manager game;
   public float logicalPosition = 0;
-  void Start()
-  {
-    while (!Manager.INSTANCE) { }
-    game = Manager.INSTANCE;
-  }
   void FixedUpdate()
   {
-    var dist = logicalPosition - game.playerDistance;
-    if (dist < -1000) Destroy(gameObject);
+    var dist = logicalPosition - Manager.INSTANCE.playerDistance;
+    if (dist < -100) Destroy(gameObject);
 
     var newTransform = transform.position;
     newTransform.x = dist;
@@ -20,6 +14,7 @@ public class Pipe : MonoBehaviour
   }
   void OnTriggerEnter2D()
   {
-    game.pipesPassed += 1;
+    while (!Manager.INSTANCE) { }
+    Manager.INSTANCE.pipesPassed += 1;
   }
 }

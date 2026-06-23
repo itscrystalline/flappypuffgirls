@@ -1,11 +1,11 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class Manager : MonoBehaviour
 {
@@ -13,12 +13,16 @@ public class Manager : MonoBehaviour
   private float playerBaseSpeed = 5;
   public float playerJumpForce = 15;
   public bool noClip = false;
+  public GameObject[] pipePrefabs = new GameObject[] { };
 
   // State
   public double localDifficulty = 1.0;
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
-  private GameObject? player;
+
+  private GameObject? player = null;
+  private Pipe? lastPipe = null;
+  private float viewportWidth = 0.0f;
 
   public float PlayerEffectiveSpeed()
   {
@@ -55,6 +59,7 @@ public class Manager : MonoBehaviour
       var camera = Camera.main;
       var viewportHeight = camera.orthographicSize;
       var viewportWidth = viewportHeight * camera.aspect;
+      this.viewportWidth = viewportWidth;
       Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
 
       if (wallColliders.Length < 4)
@@ -78,7 +83,7 @@ public class Manager : MonoBehaviour
 
   void Update()
   {
-    if (reset!.WasPerformedThisFrame())
+    if (reset!.WasPerformedThisFrame() && SceneManager.GetActiveScene().name == "Game")
     {
       ResetGame();
     }
@@ -89,6 +94,7 @@ public class Manager : MonoBehaviour
     {
       localDifficulty += 0.1 * Time.deltaTime;
       playerDistance += PlayerEffectiveSpeed() * Time.deltaTime;
+      SpawnNextPipe();
     }
   }
 
@@ -101,15 +107,34 @@ public class Manager : MonoBehaviour
     player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
   }
 
+  private void SpawnNextPipe()
+  {
+    if (lastPipe && lastPipe.logicalPosition - playerDistance > viewportWidth) return;
+    if (pipePrefabs.Length == 0) return;
 
-  Vector2 CentroidOf((Vector2, Vector2) vecs)
+
+    var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
+    if (!lastPipe)
+    {
+      pipe.logicalPosition = viewportWidth;
+      pipe.transform.position = new Vector2(viewportWidth, 0);
+    }
+    else
+    {
+      pipe.logicalPosition = lastPipe.logicalPosition + 10;
+      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, 0);
+    }
+    lastPipe = pipe;
+
+    SpawnNextPipe();
+  }
+
+  static Vector2 CentroidOf((Vector2, Vector2) vecs)
   {
     return new Vector2((vecs.Item2.x + vecs.Item1.x) / 2, (vecs.Item2.y + vecs.Item1.y) / 2);
   }
-  Vector2 SizeOf((Vector2, Vector2) vecs)
+  static Vector2 SizeOf((Vector2, Vector2) vecs)
   {
     return new Vector2(Math.Abs(vecs.Item2.x - vecs.Item1.x), Math.Abs(vecs.Item2.y - vecs.Item1.y));
   }
-
-
 }
