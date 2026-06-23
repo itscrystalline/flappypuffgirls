@@ -17,6 +17,7 @@ public class Manager : MonoBehaviour
   public double localDifficulty = 1.0;
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
+  private GameObject? player;
 
   public float PlayerEffectiveSpeed()
   {
@@ -48,7 +49,7 @@ public class Manager : MonoBehaviour
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
-
+      player = GameObject.FindGameObjectWithTag("Player");
       var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
       var camera = Camera.main;
       var viewportHeight = camera.orthographicSize;
@@ -92,7 +93,12 @@ public class Manager : MonoBehaviour
 
   public void ResetGame()
   {
-    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    localDifficulty = 1.0;
+    playerDistance = 0.0f;
+    pipesPassed = 0;
+    player!.transform.position = Vector3.zero;
+    player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
   }
 
 
