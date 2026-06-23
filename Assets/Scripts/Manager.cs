@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -67,14 +68,11 @@ public class Manager : MonoBehaviour
       var top = (new Vector2(-viewportWidth, viewportHeight), new Vector2(viewportWidth, viewportHeight + 0.5f));
       var bottom = (new Vector2(-viewportWidth, -viewportHeight - 0.5f), new Vector2(viewportWidth, -viewportHeight));
 
-      wallColliders[0].offset = CentroidOf(left);
-      wallColliders[0].size = SizeOf(left);
-      wallColliders[1].offset = CentroidOf(right);
-      wallColliders[1].size = SizeOf(right);
-      wallColliders[2].offset = CentroidOf(top);
-      wallColliders[2].size = SizeOf(top);
-      wallColliders[3].offset = CentroidOf(bottom);
-      wallColliders[3].size = SizeOf(bottom);
+      foreach ((BoxCollider2D box, (Vector2, Vector2) corners) in wallColliders.Zip(new (Vector2, Vector2)[] { left, right, bottom, top }, (a, b) => (a, b)))
+      {
+        box.offset = CentroidOf(corners);
+        box.size = SizeOf(corners);
+      }
     }
   }
 
@@ -93,7 +91,6 @@ public class Manager : MonoBehaviour
 
   public void ResetGame()
   {
-    // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     localDifficulty = 1.0;
     playerDistance = 0.0f;
     pipesPassed = 0;
