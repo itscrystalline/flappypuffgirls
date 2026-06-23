@@ -10,6 +10,6 @@ public class PipeCriticalZone : MonoBehaviour
   }
   void OnTriggerEnter2D()
   {
-    game.localDifficulty *= 1.1;
+    game.localDifficulty *= game.criticalDifficultyScaleFactor;
   }
 }

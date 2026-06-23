@@ -12,6 +12,9 @@ public class Manager : MonoBehaviour
   [SerializeField]
   private float playerBaseSpeed = 5;
   public float playerJumpForce = 15;
+  public double difficultyScaleFactor = 1.005;
+  public double difficultySpeedScaleFactor = 1.1;
+  public double criticalDifficultyScaleFactor = 1.01;
   public bool noClip = false;
   public GameObject[] pipePrefabs = new GameObject[] { };
 
@@ -30,7 +33,7 @@ public class Manager : MonoBehaviour
   }
   public float PlayerEffectiveSpeed(double difficulty)
   {
-    return (float)(playerBaseSpeed + Math.Pow(difficulty, 1.05));
+    return (float)(playerBaseSpeed + Math.Pow(difficulty, difficultySpeedScaleFactor));
   }
 
 
@@ -92,8 +95,8 @@ public class Manager : MonoBehaviour
   {
     if (SceneManager.GetActiveScene().name == "Game")
     {
-      localDifficulty += 0.1 * Time.deltaTime;
-      playerDistance += PlayerEffectiveSpeed() * Time.deltaTime;
+      localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
+      playerDistance += PlayerEffectiveSpeed() * Time.fixedDeltaTime;
       SpawnNextPipe();
     }
   }
