@@ -18,11 +18,11 @@ public class Manager : MonoBehaviour
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
 
-  public float playerEffectiveSpeed()
+  public float PlayerEffectiveSpeed()
   {
-    return playerEffectiveSpeed(localDifficulty);
+    return PlayerEffectiveSpeed(localDifficulty);
   }
-  public float playerEffectiveSpeed(double difficulty)
+  public float PlayerEffectiveSpeed(double difficulty)
   {
     return (float)(playerBaseSpeed + Math.Pow(difficulty, 1.05));
   }
@@ -82,7 +82,7 @@ public class Manager : MonoBehaviour
     if (SceneManager.GetActiveScene().name == "Game")
     {
       localDifficulty += 0.1 * Time.deltaTime;
-      playerDistance += playerEffectiveSpeed() * Time.deltaTime;
+      playerDistance += PlayerEffectiveSpeed() * Time.deltaTime;
     }
     if (reset!.WasPerformedThisFrame())
     {
@@ -94,6 +94,7 @@ public class Manager : MonoBehaviour
   {
     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
+
 
   Vector2 CentroidOf((Vector2, Vector2) vecs)
   {
