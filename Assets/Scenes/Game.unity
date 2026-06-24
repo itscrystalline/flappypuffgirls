@@ -696,7 +696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Manager
   playerBaseSpeed: 5
-  playerJumpForce: 12
+  playerJumpForce: 10
   difficultyScaleFactor: 1.005
   difficultySpeedScaleFactor: 1.1
   criticalDifficultyScaleFactor: 1.01
