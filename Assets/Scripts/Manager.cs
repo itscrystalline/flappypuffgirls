@@ -10,8 +10,8 @@ using Random = UnityEngine.Random;
 public class Manager : MonoBehaviour
 {
   [SerializeField]
-  private float playerBaseSpeed = 5;
-  public float playerJumpForce = 15;
+  private float playerBaseSpeed = 6;
+  public float playerJumpForce = 11;
   public double difficultyScaleFactor = 1.005;
   public double difficultySpeedScaleFactor = 1.1;
   public double criticalDifficultyScaleFactor = 1.01;
@@ -23,6 +23,7 @@ public class Manager : MonoBehaviour
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
 
+  private float minPipeGap = 0f;
   private GameObject? player = null;
   private Pipe? lastPipe = null;
   private float viewportWidth = 0.0f;
@@ -58,6 +59,7 @@ public class Manager : MonoBehaviour
     if (SceneManager.GetActiveScene().name == "Game")
     {
       player = GameObject.FindGameObjectWithTag("Player");
+      minPipeGap = playerJumpForce * playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * player.GetComponent<Rigidbody2D>().gravityScale) * 2f);
       var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
       var camera = Camera.main;
       var viewportHeight = camera.orthographicSize;
@@ -108,6 +110,7 @@ public class Manager : MonoBehaviour
     pipesPassed = 0;
     player!.transform.position = Vector3.zero;
     player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
+    foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
   }
 
   private void SpawnNextPipe()
@@ -115,9 +118,8 @@ public class Manager : MonoBehaviour
     if (lastPipe && lastPipe.logicalPosition - playerDistance > viewportWidth) return;
     if (pipePrefabs.Length == 0) return;
 
-
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
-    pipe.openingSize = Random.Range(1.0f, 4.0f);
+    pipe.openingSize = Random.Range(minPipeGap, 4.0f);
     if (!lastPipe)
     {
       pipe.logicalPosition = viewportWidth;

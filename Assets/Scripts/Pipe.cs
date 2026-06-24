@@ -35,7 +35,6 @@ public class Pipe : MonoBehaviour
 
   void SetOpeningSize()
   {
-    print($"set openingSize {openingSize}");
     var sidedOpeningSize = openingSize / 4f;
     stemUpper.transform.localPosition = new Vector2(0, 2.7896f + sidedOpeningSize);
     stemLower.transform.localPosition = new Vector2(0, -2.8315f - sidedOpeningSize);
