@@ -16,6 +16,11 @@ public class Manager : MonoBehaviour
   public double difficultySpeedScaleFactor = 1.1;
   public double criticalDifficultyScaleFactor = 1.01;
   public bool noClip = false;
+
+  [Range(0.3f, 1.8f)]
+  private float difficultyScaledRandomBound1 = 1.1f;
+  [Range(0.5f, 2.0f)]
+  private float difficultyScaledRandomBound2 = 1.3f;
   public GameObject[] pipePrefabs = new GameObject[] { };
 
   // State
@@ -119,22 +124,35 @@ public class Manager : MonoBehaviour
     if (pipePrefabs.Length == 0) return;
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
-    pipe.openingSize = Random.Range(minPipeGap, 4.0f);
+    pipe.openingSize = DifficultyScaledRandomRange(minPipeGap + player!.GetComponent<CircleCollider2D>().radius, 10.0f, localDifficulty, true);
     if (!lastPipe)
     {
       pipe.logicalPosition = viewportWidth;
-      pipe.transform.position = new Vector2(viewportWidth, 0);
+      pipe.transform.position = new Vector2(viewportWidth, Random.Range(1f, 9f));
     }
     else
     {
       pipe.logicalPosition = lastPipe.logicalPosition + 10;
-      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, 0);
+      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, Random.Range(1f, 9f));
     }
     lastPipe = pipe;
 
     SpawnNextPipe();
   }
 
+  float DifficultyScaledRandomRange(float min, float max, double difficulty, bool invert)
+  {
+    var bound1 = Mathf.Clamp(Mathf.Pow((float)difficulty, difficultyScaledRandomBound1), min, max);
+    var bound2 = Mathf.Clamp(Mathf.Pow((float)difficulty, difficultyScaledRandomBound2), min, max);
+    if (invert)
+    {
+      return Random.Range(Mathf.Min(max - bound1, max - bound2), Mathf.Max(max - bound1, max - bound2));
+    }
+    else
+    {
+      return Random.Range(Mathf.Min(bound1, bound2), Mathf.Max(bound1, bound2));
+    }
+  }
   static Vector2 CentroidOf((Vector2, Vector2) vecs)
   {
     return new Vector2((vecs.Item2.x + vecs.Item1.x) / 2, (vecs.Item2.y + vecs.Item1.y) / 2);
