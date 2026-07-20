@@ -697,10 +697,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Manager
   playerBaseSpeed: 6
   playerJumpForce: 11
-  difficultyScaleFactor: 1.005
+  difficultyScaleFactor: 1.05
   difficultySpeedScaleFactor: 1.1
   criticalDifficultyScaleFactor: 1.01
   noClip: 0
+  difficultyScaledRandomBound1: 1.1
+  difficultyScaledRandomBound2: 1.3
+  pipeHeightRandomBound1: -2
+  pipeHeightRandomBound2: 2
   pipePrefabs:
   - {fileID: 1484155534249996142, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
   - {fileID: 1484155534249996142, guid: 0a706d9cc369c009192accbcf5dfb413, type: 3}
@@ -717,7 +721,7 @@ Transform:
   m_GameObject: {fileID: 1156524148}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 939.0025, y: 498.51965, z: 0}
+  m_LocalPosition: {x: 0, y: 0.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

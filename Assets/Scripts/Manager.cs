@@ -17,10 +17,19 @@ public class Manager : MonoBehaviour
   public double criticalDifficultyScaleFactor = 1.01;
   public bool noClip = false;
 
+  [SerializeField]
   [Range(0.3f, 1.8f)]
   private float difficultyScaledRandomBound1 = 1.1f;
+  [SerializeField]
   [Range(0.5f, 2.0f)]
   private float difficultyScaledRandomBound2 = 1.3f;
+  [SerializeField]
+  [Range(-6f, 0f)]
+  private float pipeHeightRandomBound1 = -2f;
+  [SerializeField]
+  [Range(0f, 6f)]
+  private float pipeHeightRandomBound2 = 2f;
+
   public GameObject[] pipePrefabs = new GameObject[] { };
 
   // State
@@ -124,16 +133,17 @@ public class Manager : MonoBehaviour
     if (pipePrefabs.Length == 0) return;
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
-    pipe.openingSize = DifficultyScaledRandomRange(minPipeGap + player!.GetComponent<CircleCollider2D>().radius, 10.0f, localDifficulty, true);
+    var spawnHeight = Random.Range(pipeHeightRandomBound1, pipeHeightRandomBound2);
+    pipe.openingSize = DifficultyScaledRandomRange(minPipeGap + player!.GetComponent<CircleCollider2D>().radius, 7.0f, localDifficulty, true);
     if (!lastPipe)
     {
       pipe.logicalPosition = viewportWidth;
-      pipe.transform.position = new Vector2(viewportWidth, Random.Range(1f, 9f));
+      pipe.transform.position = new Vector2(viewportWidth, spawnHeight);
     }
     else
     {
       pipe.logicalPosition = lastPipe.logicalPosition + 10;
-      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, Random.Range(1f, 9f));
+      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, spawnHeight);
     }
     lastPipe = pipe;
 
