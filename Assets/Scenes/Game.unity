@@ -716,7 +716,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000000000000
+  m_text: '0000000000
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
   m_sharedMaterial: {fileID: 6632487349039706507, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
@@ -1482,7 +1484,7 @@ MonoBehaviour:
   difficultyScaleFactor: 1.05
   difficultySpeedScaleFactor: 1.1
   criticalDifficultyScaleFactor: 1.01
-  noClip: 0
+  noClip: 1
   difficultyScaledRandomBound1: 1.1
   difficultyScaledRandomBound2: 1.3
   pipeHeightRandomBound1: -2
@@ -2032,7 +2034,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000000000000
+  m_text: '0000000000
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
   m_sharedMaterial: {fileID: 6632487349039706507, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
@@ -2282,7 +2286,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 000000000000
+  m_text: '0000000000
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
   m_sharedMaterial: {fileID: 6632487349039706507, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
