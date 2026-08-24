@@ -1,13 +1,20 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class Manager : MonoBehaviour
+public enum GameState
+{
+  Menu,
+  Playing,
+  Died
+}
+
+public class GameplayManager : MonoBehaviour
 {
   [SerializeField]
   private float playerBaseSpeed = 6;
@@ -30,9 +37,20 @@ public class Manager : MonoBehaviour
   [Range(0f, 6f)]
   private float pipeHeightRandomBound2 = 2f;
 
-  public GameObject[] pipePrefabs = new GameObject[] { };
+  public GameObject[] pipePrefabs = Array.Empty<GameObject>();
+  public GameObject? backgroundDay = null, backgroundNight = null;
 
   // State
+  [SerializeField]
+  private GameState _state = GameState.Menu;
+  public GameState State
+  {
+    get => _state; set
+    {
+      _state = value;
+      foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == value);
+    }
+  }
   public double localDifficulty = 1.0;
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
@@ -41,6 +59,7 @@ public class Manager : MonoBehaviour
   private GameObject? player = null;
   private Pipe? lastPipe = null;
   private float viewportWidth = 0.0f;
+  private Dictionary<GameState, GameObject[]> uiElements = new Dictionary<GameState, GameObject[]>();
 
   public float PlayerEffectiveSpeed()
   {
@@ -53,7 +72,7 @@ public class Manager : MonoBehaviour
 
 
   [HideInInspector]
-  public static Manager? INSTANCE = null;
+  public static GameplayManager? INSTANCE = null;
   private InputAction? reset;
 
   void Awake()
@@ -70,61 +89,91 @@ public class Manager : MonoBehaviour
 
   void Start()
   {
-    if (SceneManager.GetActiveScene().name == "Game")
+    player = GameObject.FindGameObjectWithTag("Player");
+    player!.SetActive(false);
+
+    minPipeGap = playerJumpForce * playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * player.GetComponent<Rigidbody2D>().gravityScale) * 2f);
+
+    var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
+    var camera = Camera.main;
+    var viewportHeight = camera.orthographicSize;
+    var viewportWidth = viewportHeight * camera.aspect;
+    this.viewportWidth = viewportWidth;
+    Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
+
+    if (wallColliders.Length < 4)
     {
-      player = GameObject.FindGameObjectWithTag("Player");
-      minPipeGap = playerJumpForce * playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * player.GetComponent<Rigidbody2D>().gravityScale) * 2f);
-      var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
-      var camera = Camera.main;
-      var viewportHeight = camera.orthographicSize;
-      var viewportWidth = viewportHeight * camera.aspect;
-      this.viewportWidth = viewportWidth;
-      Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
-
-      if (wallColliders.Length < 4)
-      {
-        Debug.LogError("Less than 4 wall colliders!");
-        return;
-      }
-
-      var left = (new Vector2(-viewportWidth, -viewportHeight), new Vector2(-0.5f, viewportHeight));
-      var right = (new Vector2(0.5f, -viewportHeight), new Vector2(viewportWidth, viewportHeight));
-      var top = (new Vector2(-viewportWidth, viewportHeight), new Vector2(viewportWidth, viewportHeight + 0.5f));
-      var bottom = (new Vector2(-viewportWidth, -viewportHeight - 0.5f), new Vector2(viewportWidth, -viewportHeight));
-
-      foreach ((BoxCollider2D box, (Vector2, Vector2) corners) in wallColliders.Zip(new (Vector2, Vector2)[] { left, right, bottom, top }, (a, b) => (a, b)))
-      {
-        box.offset = CentroidOf(corners);
-        box.size = SizeOf(corners);
-      }
+      Debug.LogError("Less than 4 wall colliders!");
+      return;
     }
+
+    var left = (new Vector2(-viewportWidth, -viewportHeight), new Vector2(-0.5f, viewportHeight));
+    var right = (new Vector2(0.5f, -viewportHeight), new Vector2(viewportWidth, viewportHeight));
+    var top = (new Vector2(-viewportWidth, viewportHeight), new Vector2(viewportWidth, viewportHeight + 0.5f));
+    var bottom = (new Vector2(-viewportWidth, -viewportHeight - 0.5f), new Vector2(viewportWidth, -viewportHeight));
+
+    foreach ((BoxCollider2D box, (Vector2, Vector2) corners) in wallColliders.Zip(new (Vector2, Vector2)[] { left, right, bottom, top }, (a, b) => (a, b)))
+    {
+      box.offset = CentroidOf(corners);
+      box.size = SizeOf(corners);
+    }
+
+    foreach ((var bkgrnd, int idx) in new[] { backgroundDay!, backgroundNight! }.Select((g, i) => (g, i)))
+    {
+      var sprite = bkgrnd.GetComponent<SpriteRenderer>();
+      var height = sprite.size;
+      var screenHeight = viewportHeight * 2;
+      var scalingRatio = screenHeight / height.y;
+      sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
+    }
+
+    uiElements[GameState.Menu] = GameObject.FindGameObjectsWithTag("UIPregame");
+    uiElements[GameState.Playing] = GameObject.FindGameObjectsWithTag("UIGame");
+    uiElements[GameState.Died] = GameObject.FindGameObjectsWithTag("UIPostgame");
+
+    foreach (var g in uiElements[State]) g.SetActive(true);
   }
 
   void Update()
   {
-    if (reset!.WasPerformedThisFrame() && SceneManager.GetActiveScene().name == "Game")
+    if (reset!.WasPerformedThisFrame())
     {
       ResetGame();
     }
   }
   void FixedUpdate()
   {
-    if (SceneManager.GetActiveScene().name == "Game")
+    if (State == GameState.Playing)
     {
       localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
       playerDistance += PlayerEffectiveSpeed() * Time.fixedDeltaTime;
-      SpawnNextPipe();
     }
+    SpawnNextPipe();
   }
 
-  public void ResetGame()
+  public void StartGame()
   {
-    localDifficulty = 1.0;
-    playerDistance = 0.0f;
-    pipesPassed = 0;
-    player!.transform.position = Vector3.zero;
-    player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
-    foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
+    State = GameState.Playing;
+    Debug.Log("Started!");
+    ResetGame(false);
+  }
+  public void PlayerDied()
+  {
+    State = GameState.Died;
+  }
+
+  public void ResetGame(bool toMenu = true)
+  {
+    if (State == GameState.Playing)
+    {
+      localDifficulty = 1.0;
+      playerDistance = 0.0f;
+      pipesPassed = 0;
+      player!.transform.position = Vector3.zero;
+      player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
+      foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
+      if (toMenu) State = GameState.Menu;
+    }
   }
 
   private void SpawnNextPipe()

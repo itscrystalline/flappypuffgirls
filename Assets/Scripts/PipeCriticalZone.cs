@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class PipeCriticalZone : MonoBehaviour
 {
-  private Manager game;
+  private GameplayManager game;
   void Start()
   {
-    while (!Manager.INSTANCE) { }
-    game = Manager.INSTANCE;
+    game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
   }
   void OnTriggerEnter2D()
   {

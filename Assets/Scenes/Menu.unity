@@ -364,6 +364,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60c001577331baf7c8a88f4d65346ef4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  playerBaseSpeed: 6
+  playerJumpForce: 11
+  difficultyScaleFactor: 1.005
+  difficultySpeedScaleFactor: 1.1
+  criticalDifficultyScaleFactor: 1.01
+  noClip: 0
+  difficultyScaledRandomBound1: 1.1
+  difficultyScaledRandomBound2: 1.3
+  pipeHeightRandomBound1: -2
+  pipeHeightRandomBound2: 2
+  pipePrefabs: []
+  backgroundDay: {fileID: 0}
+  backgroundNight: {fileID: 0}
+  localDifficulty: 1
+  playerDistance: 0
+  pipesPassed: 0
 --- !u!4 &1409390825
 Transform:
   m_ObjectHideFlags: 0
@@ -413,8 +429,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -79}
-  m_SizeDelta: {x: 683.1948, y: 201.8941}
+  m_AnchoredPosition: {x: 0, y: -77}
+  m_SizeDelta: {x: 345.1514, y: 101.9973}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1669067343
 MonoBehaviour:

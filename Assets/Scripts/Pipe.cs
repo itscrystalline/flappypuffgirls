@@ -10,6 +10,8 @@ public class Pipe : MonoBehaviour
   private BoxCollider2D criticalZoneUpper, criticalZoneLower;
   private BoxCollider2D hitbox;
 
+  private GameplayManager manager;
+
   void Start()
   {
     stemUpper = transform.Find("PipeUpperStem");
@@ -19,11 +21,12 @@ public class Pipe : MonoBehaviour
     criticalZoneUpper = baseUpper.Find("CriticalZoneUpper").gameObject.GetComponent<BoxCollider2D>();
     criticalZoneLower = baseLower.Find("CriticalZoneLower").gameObject.GetComponent<BoxCollider2D>();
     hitbox = GetComponent<BoxCollider2D>();
+    manager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
   }
 
   void FixedUpdate()
   {
-    var dist = logicalPosition - Manager.INSTANCE.playerDistance;
+    var dist = logicalPosition - manager.playerDistance;
     if (dist < -100) Destroy(gameObject);
 
     var newTransform = transform.position;
@@ -52,7 +55,6 @@ public class Pipe : MonoBehaviour
 
   void OnTriggerEnter2D()
   {
-    while (!Manager.INSTANCE) { }
-    Manager.INSTANCE.pipesPassed += 1;
+    manager.pipesPassed += 1;
   }
 }

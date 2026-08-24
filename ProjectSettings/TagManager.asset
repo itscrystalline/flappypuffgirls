@@ -6,6 +6,9 @@ TagManager:
   tags:
   - PlayWall
   - Pipe
+  - UIPregame
+  - UIGame
+  - UIPostgame
   layers:
   - Default
   - TransparentFX

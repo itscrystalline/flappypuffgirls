@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class PipeKill : MonoBehaviour
 {
-  private Manager game;
+  private GameplayManager game;
   void Start()
   {
-    while (!Manager.INSTANCE) { }
-    game = Manager.INSTANCE;
+    game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
 
     if (game.noClip)
     {
@@ -17,6 +16,6 @@ public class PipeKill : MonoBehaviour
   }
   void OnCollisionEnter2D(Collision2D col)
   {
-    if (!game.noClip) game.ResetGame();
+    if (!game.noClip) game.PlayerDied();
   }
 }
