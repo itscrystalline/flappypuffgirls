@@ -43,14 +43,6 @@ public class GameplayManager : MonoBehaviour
   // State
   [SerializeField]
   private GameState _state = GameState.Menu;
-  public GameState State
-  {
-    get => _state; set
-    {
-      _state = value;
-      foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == value);
-    }
-  }
   public double localDifficulty = 1.0;
   public float playerDistance = 0.0f;
   public int pipesPassed = 0;
@@ -61,10 +53,7 @@ public class GameplayManager : MonoBehaviour
   private float viewportWidth = 0.0f;
   private Dictionary<GameState, GameObject[]> uiElements = new Dictionary<GameState, GameObject[]>();
 
-  public float PlayerEffectiveSpeed()
-  {
-    return PlayerEffectiveSpeed(localDifficulty);
-  }
+  public float PlayerEffectiveSpeed() => PlayerEffectiveSpeed(localDifficulty);
   public float PlayerEffectiveSpeed(double difficulty)
   {
     return (float)(playerBaseSpeed + Math.Pow(difficulty, difficultySpeedScaleFactor));
@@ -74,6 +63,29 @@ public class GameplayManager : MonoBehaviour
   [HideInInspector]
   public static GameplayManager? INSTANCE = null;
   private InputAction? reset;
+  private InputAction? jump;
+
+
+  public GameState State
+  {
+    get => _state; set
+    {
+      _state = value;
+      foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == value);
+      switch (value)
+      {
+        case GameState.Playing:
+          player!.SetActive(true);
+          break;
+        case GameState.Menu:
+          player!.SetActive(false);
+          break;
+        case GameState.Died:
+          StartGame();
+          break;
+      }
+    }
+  }
 
   void Awake()
   {
@@ -91,6 +103,8 @@ public class GameplayManager : MonoBehaviour
   {
     player = GameObject.FindGameObjectWithTag("Player");
     player!.SetActive(false);
+
+    jump = InputSystem.actions.FindAction("Jump");
 
     minPipeGap = playerJumpForce * playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * player.GetComponent<Rigidbody2D>().gravityScale) * 2f);
 
@@ -131,21 +145,26 @@ public class GameplayManager : MonoBehaviour
     uiElements[GameState.Playing] = GameObject.FindGameObjectsWithTag("UIGame");
     uiElements[GameState.Died] = GameObject.FindGameObjectsWithTag("UIPostgame");
 
-    foreach (var g in uiElements[State]) g.SetActive(true);
+    foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == State);
   }
 
   void Update()
   {
     if (reset!.WasPerformedThisFrame())
     {
-      ResetGame();
+      ResetGame(true);
+    }
+
+    if (jump!.WasPerformedThisFrame() && State == GameState.Menu)
+    {
+      StartGame();
     }
   }
   void FixedUpdate()
   {
-    if (State == GameState.Playing)
+    if (State == GameState.Playing || State == GameState.Menu)
     {
-      localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
+      if (State == GameState.Playing) localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
       playerDistance += PlayerEffectiveSpeed() * Time.fixedDeltaTime;
     }
     SpawnNextPipe();
@@ -164,16 +183,13 @@ public class GameplayManager : MonoBehaviour
 
   public void ResetGame(bool toMenu = true)
   {
-    if (State == GameState.Playing)
-    {
-      localDifficulty = 1.0;
-      playerDistance = 0.0f;
-      pipesPassed = 0;
-      player!.transform.position = Vector3.zero;
-      player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
-      foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
-      if (toMenu) State = GameState.Menu;
-    }
+    localDifficulty = 1.0;
+    playerDistance = 0.0f;
+    pipesPassed = 0;
+    player!.transform.position = Vector3.zero;
+    player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
+    foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
+    if (toMenu) State = GameState.Menu;
   }
 
   private void SpawnNextPipe()
