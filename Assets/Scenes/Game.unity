@@ -1497,6 +1497,12 @@ MonoBehaviour:
   localDifficulty: 1
   playerDistance: 0
   pipesPassed: 0
+  onPipePass:
+    m_PersistentCalls:
+      m_Calls: []
+  onPipeCriticalPass:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1156524150
 Transform:
   m_ObjectHideFlags: 0

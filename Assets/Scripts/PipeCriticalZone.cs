@@ -9,6 +9,6 @@ public class PipeCriticalZone : MonoBehaviour
   }
   void OnTriggerEnter2D()
   {
-    game.localDifficulty *= game.criticalDifficultyScaleFactor;
+    game.onPipeCriticalPass.Invoke();
   }
 }

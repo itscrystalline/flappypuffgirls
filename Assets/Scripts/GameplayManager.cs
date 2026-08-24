@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
@@ -58,6 +59,10 @@ public class GameplayManager : MonoBehaviour
   {
     return (float)(playerBaseSpeed + Math.Pow(difficulty, difficultySpeedScaleFactor));
   }
+
+  // Events
+  public UnityEvent onPipePass = new();
+  public UnityEvent onPipeCriticalPass = new();
 
 
   [HideInInspector]
@@ -146,6 +151,9 @@ public class GameplayManager : MonoBehaviour
     uiElements[GameState.Died] = GameObject.FindGameObjectsWithTag("UIPostgame");
 
     foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == State);
+
+    onPipePass.AddListener(() => pipesPassed += 1);
+    onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
   }
 
   void Update()

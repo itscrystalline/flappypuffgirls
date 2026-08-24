@@ -55,6 +55,6 @@ public class Pipe : MonoBehaviour
 
   void OnTriggerEnter2D()
   {
-    manager.pipesPassed += 1;
+    manager.onPipePass.Invoke();
   }
 }
