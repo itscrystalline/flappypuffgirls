@@ -16,6 +16,7 @@ public class PipeKill : MonoBehaviour
   }
   void OnCollisionEnter2D(Collision2D col)
   {
-    if (!game.noClip) game.PlayerDied();
+    if (!game.noClip)
+      game.PlayerDied();
   }
 }

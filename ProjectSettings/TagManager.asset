@@ -9,6 +9,8 @@ TagManager:
   - UIPregame
   - UIGame
   - UIPostgame
+  - Backdrop
+  - UIMenu
   layers:
   - Default
   - TransparentFX

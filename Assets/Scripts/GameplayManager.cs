@@ -2,15 +2,18 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public enum GameState
 {
   Menu,
+  Pregame,
   Playing,
   Died
 }
@@ -50,6 +53,7 @@ public class GameplayManager : MonoBehaviour
 
   private float minPipeGap = 0f;
   private GameObject? player = null;
+  private Image? backdrop = null;
   private Pipe? lastPipe = null;
   private float viewportWidth = 0.0f;
   private Dictionary<GameState, GameObject[]> uiElements = new Dictionary<GameState, GameObject[]>();
@@ -79,14 +83,17 @@ public class GameplayManager : MonoBehaviour
       foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == value);
       switch (value)
       {
+        case GameState.Menu:
+          player!.SetActive(false);
+          DoBackdropFade(0, 0.8313725490f, x => x);
+          break;
+        case GameState.Pregame:
+          break;
         case GameState.Playing:
           player!.SetActive(true);
           break;
-        case GameState.Menu:
-          player!.SetActive(false);
-          break;
         case GameState.Died:
-          StartGame();
+          print("Died!!");
           break;
       }
     }
@@ -120,11 +127,7 @@ public class GameplayManager : MonoBehaviour
     this.viewportWidth = viewportWidth;
     Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
 
-    if (wallColliders.Length < 4)
-    {
-      Debug.LogError("Less than 4 wall colliders!");
-      return;
-    }
+    backdrop = GameObject.FindGameObjectWithTag("Backdrop").GetComponent<Image>();
 
     var left = (new Vector2(-viewportWidth, -viewportHeight), new Vector2(-0.5f, viewportHeight));
     var right = (new Vector2(0.5f, -viewportHeight), new Vector2(viewportWidth, viewportHeight));
@@ -146,7 +149,8 @@ public class GameplayManager : MonoBehaviour
       sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
     }
 
-    uiElements[GameState.Menu] = GameObject.FindGameObjectsWithTag("UIPregame");
+    uiElements[GameState.Menu] = GameObject.FindGameObjectsWithTag("UIMenu");
+    uiElements[GameState.Pregame] = GameObject.FindGameObjectsWithTag("UIPregame");
     uiElements[GameState.Playing] = GameObject.FindGameObjectsWithTag("UIGame");
     uiElements[GameState.Died] = GameObject.FindGameObjectsWithTag("UIPostgame");
 
@@ -180,13 +184,28 @@ public class GameplayManager : MonoBehaviour
 
   public void StartGame()
   {
-    State = GameState.Playing;
-    Debug.Log("Started!");
-    ResetGame(false);
+    DoBackdropFade(750, 0f, x => 1 - Mathf.Pow(1 - x, 5));
+    StartCoroutine(RunOver(750, (_, progress) =>
+    {
+      if (progress == 0)
+      {
+        State = GameState.Pregame;
+      }
+      else if (progress == 499)
+      {
+        State = GameState.Playing;
+        Debug.Log("Started!");
+        ResetGame(false);
+      }
+    }));
   }
   public void PlayerDied()
   {
-    State = GameState.Died;
+    StartCoroutine(RunOver(1000, (_, i) =>
+    {
+      if (i == 999) State = GameState.Died;
+    }));
+    DoBackdropFade(750, 0.9f, x => 1 - Mathf.Pow(1 - x, 3));
   }
 
   public void ResetGame(bool toMenu = true)
@@ -236,6 +255,39 @@ public class GameplayManager : MonoBehaviour
       return Random.Range(Mathf.Min(bound1, bound2), Mathf.Max(bound1, bound2));
     }
   }
+
+  void DoBackdropFade(uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, Action? callback = null)
+  {
+    Color startColor = backdrop!.color;
+    if (milliseconds == 0)
+    {
+      backdrop!.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+      goto end;
+    }
+
+    IEnumerator DoBackdropFadeImpl(Color startColor, uint milliseconds, float targetAlpha, Func<float, float> tweenFunction)
+    {
+      float startAlpha = backdrop!.color.a;
+      yield return RunOver(milliseconds, (progress, _) =>
+      {
+        backdrop!.color = new Color(startColor.r, startColor.g, startColor.b, startAlpha + ((targetAlpha - startAlpha) * tweenFunction(progress)));
+      });
+    }
+    StartCoroutine(DoBackdropFadeImpl(startColor, milliseconds, targetAlpha, tweenFunction));
+
+  end:
+    callback?.Invoke();
+  }
+
+  static IEnumerator RunOver(uint milliseconds, Action<float, uint> runOnProgress)
+  {
+    for (uint i = 0; i < milliseconds; i++)
+    {
+      runOnProgress((float)i / milliseconds, i);
+      yield return new WaitForSeconds(0.001f);
+    }
+  }
+
   static Vector2 CentroidOf((Vector2, Vector2) vecs)
   {
     return new Vector2((vecs.Item2.x + vecs.Item1.x) / 2, (vecs.Item2.y + vecs.Item1.y) / 2);
