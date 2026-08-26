@@ -1,48 +1,52 @@
 using System;
 using System.Collections;
-using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class ScoreDisplayController : MonoBehaviour
 {
   private GameplayManager game;
-  private TMP_Text[] children;
+  private TextController controller;
+  private TextController effect;
 
   void Start()
   {
     game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
-    children = GetComponentsInChildren<TMP_Text>(true);
+    controller = GetComponent<TextController>();
+    effect = transform.Find("ScoreTextEffect").GetComponent<TextController>();
 
     game.onPipePass.AddListener(() => OnMilestone(5f));
-    game.onPipeCriticalPass.AddListener(() => OnMilestone(10f));
+    game.onPipeCriticalPass.AddListener(() =>
+    {
+      OnMilestone(10f);
+    });
+
+    effect.gameObject.SetActive(false);
   }
 
   void OnMilestone(float increaseFontSizeBy)
   {
-    var clones = children.Select(t => Instantiate(t.gameObject, transform).GetComponent<TMP_Text>()).ToArray();
-    StartCoroutine(DoScoreFade(clones, increaseFontSizeBy));
+    StartCoroutine(DoScoreFade(increaseFontSizeBy));
   }
 
   float EaseOutQuint(float x) => 1 - Mathf.Pow(1 - x, 5);
-  IEnumerator DoScoreFade(TMP_Text[] texts, float increaseFontSizeBy)
+  IEnumerator DoScoreFade(float increaseFontSizeBy)
   {
-    var startingFontSize = texts[0].fontSize;
+    effect.gameObject.SetActive(true);
+    var startingFontSize = effect.Size;
     for (var step = 1; step <= 15; step++)
     {
-      foreach (var t in texts)
-      {
-        var ease = EaseOutQuint(step / 15f);
-        t.fontSize = startingFontSize + (ease * increaseFontSizeBy);
-        t.color = new Color(t.color.r, t.color.g, t.color.b, 1 - ease);
-      }
+      var ease = EaseOutQuint(step / 15f);
+      effect.Size = startingFontSize + (ease * increaseFontSizeBy);
+      effect.Alpha = 1 - ease;
       yield return new WaitForFixedUpdate();
     }
-    foreach (var t in texts) Destroy(t.gameObject);
+    effect.Alpha = 0;
+    effect.Size = startingFontSize;
+    effect.gameObject.SetActive(false);
   }
 
   void Update()
   {
-    foreach (var t in children) t.text = $"{Math.Round((game.localDifficulty - 1) * 10000)}".PadLeft(10, '0');
+    controller.Text = $"{Math.Round((game.localDifficulty - 1) * 10000)}".PadLeft(10, '0');
   }
 }
