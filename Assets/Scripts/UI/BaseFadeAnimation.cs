@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using Coroutween;
 using UnityEngine;
@@ -16,9 +15,9 @@ public class BaseFadeAnimation : MonoBehaviour, IUIElementAnim
     texts = GetComponentsInChildren<TextController>();
   }
 
-  public IEnumerator FadeIn()
+  public async Awaitable FadeIn()
   {
-    yield return Coroutines.RunOverTweened(100, tw =>
+    await Coroutines.RunOverTweened(100, tw =>
     {
       var alpha = Mathf.Lerp(0f, 1f, tw);
       foreach (var img in images)
@@ -44,9 +43,9 @@ public class BaseFadeAnimation : MonoBehaviour, IUIElementAnim
     }
   }
 
-  public IEnumerator FadeOut()
+  public async Awaitable FadeOut()
   {
-    yield return Coroutines.RunOverTweened(100, tw =>
+    await Coroutines.RunOverTweened(100, tw =>
     {
       var alpha = Mathf.Lerp(1f, 0f, tw);
       foreach (var img in images)

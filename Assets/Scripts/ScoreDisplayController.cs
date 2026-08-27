@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Coroutween;
 
@@ -21,14 +20,14 @@ public class ScoreDisplayController : MonoBehaviour
   {
     var dupe = Instantiate(gameObject, transform.parent).GetComponent<TextController>();
     Destroy(dupe.gameObject.GetComponent<ScoreDisplayController>());
-    StartCoroutine(DoScoreFade(dupe, increaseFontSizeBy));
+    DoScoreFade(dupe, increaseFontSizeBy);
   }
 
-  IEnumerator DoScoreFade(TextController dupe, float increaseFontSizeBy)
+  async Awaitable DoScoreFade(TextController dupe, float increaseFontSizeBy)
   {
     dupe.gameObject.SetActive(true);
     var startingFontSize = dupe.Size;
-    yield return Coroutines.RunOverTweened(250, tw =>
+    await Coroutines.RunOverTweened(250, tw =>
     {
       dupe.Size = Mathf.Lerp(startingFontSize, startingFontSize + increaseFontSizeBy, tw);
       dupe.Alpha = 1 - tw;

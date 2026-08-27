@@ -1,4 +1,3 @@
-using System.Collections;
 using Coroutween;
 using UnityEngine;
 
@@ -11,17 +10,17 @@ public class StartBtn : MonoBehaviour, IUIElementAnim
     originalPos = transform.localPosition;
   }
 
-  public IEnumerator FadeIn()
+  public async Awaitable FadeIn()
   {
-    yield return Coroutines.RunOverTweened(250, (tw) =>
+    await Coroutines.RunOverTweened(250, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
     }, Tween.EaseOutElastic);
   }
 
-  public IEnumerator FadeOut()
+  public async Awaitable FadeOut()
   {
-    yield return Coroutines.RunOverTweened(250, (tw) =>
+    await Coroutines.RunOverTweened(250, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(originalPos.y, NEW_Y, tw));
     }, Tween.EaseOutElastic);

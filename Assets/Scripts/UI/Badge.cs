@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Coroutween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,18 +30,18 @@ public class Badge : MonoBehaviour, IUIElementAnim
     originalPos = transform.localPosition;
   }
 
-  public IEnumerator FadeIn()
+  public async Awaitable FadeIn()
   {
-    StartCoroutine(RunDisplay());
-    yield return Coroutines.RunOverTweened(500, (tw) =>
+    RunDisplay();
+    await Coroutines.RunOverTweened(500, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
     }, Tween.EaseOutBounce);
   }
 
-  public IEnumerator FadeOut()
+  public async Awaitable FadeOut()
   {
-    yield return Coroutines.RunOver(50, (tw, _) =>
+    await Coroutines.RunOver(50, (tw, _) =>
     {
       var alpha = Mathf.Lerp(1f, 0f, tw);
       foreach (var img in images)
@@ -67,12 +66,12 @@ public class Badge : MonoBehaviour, IUIElementAnim
     transform.localPosition = new Vector2(originalPos.x, NEW_Y);
   }
 
-  IEnumerator RunDisplay()
+  async Awaitable RunDisplay()
   {
     var curScore = game.Score;
     var highScore = game.HighScore;
     var max = Math.Max(curScore, highScore);
-    yield return Coroutines.RunOverTweened(Math.Min(1000, max), tw =>
+    await Coroutines.RunOverTweened(Math.Min(1000, max), tw =>
     {
       var cnt = (uint)(max * tw);
       currentScore.Text = $"{Math.Min(cnt, curScore)}".PadLeft(8, '0');
@@ -83,18 +82,18 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
     if (game.Score >= 50000)
     {
-      yield return PlaceMedal(goldCoin);
+      await PlaceMedal(goldCoin);
     }
     else if (game.Score >= 20000)
     {
-      yield return PlaceMedal(silverCoin);
+      await PlaceMedal(silverCoin);
     }
     else if (game.Score >= 5000)
     {
-      yield return PlaceMedal(bronzeCoin);
+      await PlaceMedal(bronzeCoin);
     }
   }
-  IEnumerator PlaceMedal(GameObject medal)
+  async Awaitable PlaceMedal(GameObject medal)
   {
     medal.SetActive(true);
     var image = medal.GetComponent<Image>();
@@ -102,12 +101,12 @@ public class Badge : MonoBehaviour, IUIElementAnim
     var randomAngle = Random.Range(-30, 30);
     // TODO: FIXME: what about the 3 different positions ???????????????????????????????
     // var randomOffset = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
-    StartCoroutine(Coroutines.RunOverTweened(250, tw =>
+    Coroutines.RunOverTweened(250, tw =>
     {
       rect.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(0, randomAngle, tw));
       // rect.anchoredPosition += randomOffset;
-    }, Tween.EaseOutCubic));
-    yield return Coroutines.RunOverTweened(250, tw =>
+    }, Tween.EaseOutCubic);
+    await Coroutines.RunOverTweened(250, tw =>
     {
       if (tw <= 0.25f)
       {

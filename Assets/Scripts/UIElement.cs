@@ -1,6 +1,5 @@
 #nullable enable
 
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 
@@ -13,13 +12,13 @@ class UIElement : MonoBehaviour
   public void FadeIn()
   {
     if (active ?? false) return;
-    if (animator != null) { StartCoroutine(animator.FadeIn()); }
+    if (animator != null) { animator.FadeIn(); }
     active = true;
   }
   public void FadeOut()
   {
     if (!active ?? false) return;
-    if (animator != null) { StartCoroutine(animator.FadeOut()); }
+    if (animator != null) { animator.FadeOut(); }
     active = false;
   }
   public void FadeInImmeadiate()
@@ -44,7 +43,7 @@ class UIElement : MonoBehaviour
 interface IUIElementAnim
 {
   public void FadeInImmeadiate();
-  public IEnumerator FadeIn();
+  public Awaitable FadeIn();
   public void FadeOutImmeadiate();
-  public IEnumerator FadeOut();
+  public Awaitable FadeOut();
 }

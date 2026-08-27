@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Coroutween
@@ -38,18 +37,18 @@ namespace Coroutween
 
   public static class Coroutines
   {
-    public static IEnumerator RunOver(uint milliseconds, Action<float, uint> runOnProgress)
+    public static async Awaitable RunOver(uint milliseconds, Action<float, uint> runOnProgress)
     {
       for (uint i = 1; i <= milliseconds; i++)
       {
         runOnProgress((float)i / milliseconds, i);
-        yield return new WaitForSeconds(0.001f);
+        await Awaitable.WaitForSecondsAsync(0.001f);
       }
     }
-    public static IEnumerator RunOverTweened(uint milliseconds, Action<float> runOnProgressTweened, Func<float, float> tweenFunction = null)
+    public static async Awaitable RunOverTweened(uint milliseconds, Action<float> runOnProgressTweened, Func<float, float> tweenFunction = null)
     {
       tweenFunction ??= Tween.Identity;
-      yield return RunOver(milliseconds, (progress, _) => runOnProgressTweened(tweenFunction(progress)));
+      await RunOver(milliseconds, (progress, _) => runOnProgressTweened(tweenFunction(progress)));
     }
   }
 }

@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using TMPro;
-using System.Collections;
 using Coroutween;
 
 public class TextController : MonoBehaviour, IUIElementAnim
@@ -39,17 +38,17 @@ public class TextController : MonoBehaviour, IUIElementAnim
     }
   }
 
-  public IEnumerator FadeIn()
+  public async Awaitable FadeIn()
   {
-    yield return Coroutines.RunOver(100, (a, _) =>
+    await Coroutines.RunOver(100, (a, _) =>
     {
       Alpha = a;
     });
   }
 
-  public IEnumerator FadeOut()
+  public async Awaitable FadeOut()
   {
-    yield return Coroutines.RunOver(100, (a, _) =>
+    await Coroutines.RunOver(100, (a, _) =>
     {
       Alpha = 1 - a;
     });

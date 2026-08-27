@@ -1,7 +1,6 @@
 #nullable enable
 
 using System;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -145,9 +144,9 @@ public class GameplayManager : MonoBehaviour
     onDie.AddListener(PrintState);
     onPostgame.AddListener(PrintState);
 
-    onPregame.AddListener(() => StartCoroutine(PrepareStartGame()));
+    onPregame.AddListener(() => PrepareStartGame());
     onPlay.AddListener(StartGame);
-    onDie.AddListener(() => StartCoroutine(PlayerDied()));
+    onDie.AddListener(() => PlayerDied());
     onPostgame.AddListener(PostGame);
   }
 
@@ -175,23 +174,23 @@ public class GameplayManager : MonoBehaviour
     playerDistance += playerSpeed * Time.fixedDeltaTime;
   }
 
-  IEnumerator PrepareStartGame()
+  async Awaitable PrepareStartGame()
   {
-    yield return uiController!.FadeBackdrop(750, 1f, Tween.EaseOutQuint);
+    await uiController!.FadeBackdrop(750, 1f, Tween.EaseOutQuint);
     state = GameState.Playing;
     onPlay.Invoke();
-    StartCoroutine(uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint));
+    uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint);
     ResetGame(false);
   }
   void StartGame()
   {
     player!.SetActive(true);
   }
-  IEnumerator PlayerDied()
+  async Awaitable PlayerDied()
   {
-    StartCoroutine(uiController!.FadeBackdrop(750, 0.9f, Tween.EaseOutCubic));
+    uiController!.FadeBackdrop(750, 0.9f, Tween.EaseOutCubic);
     var finalSpeed = playerSpeed;
-    yield return Coroutines.RunOverTweened(1000, tw => playerSpeed = Mathf.Lerp(finalSpeed, 0, tw), Tween.EaseOutQuint);
+    await Coroutines.RunOverTweened(1000, tw => playerSpeed = Mathf.Lerp(finalSpeed, 0, tw), Tween.EaseOutQuint);
     state = GameState.Postgame;
     onPostgame.Invoke();
   }
