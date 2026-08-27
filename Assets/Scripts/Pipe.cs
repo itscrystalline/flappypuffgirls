@@ -3,7 +3,28 @@ using UnityEngine;
 public class Pipe : MonoBehaviour
 {
   public float logicalPosition = 0;
-  public float openingSize = 2.0f;
+  [SerializeField]
+  private float _openingSize = 2.0f;
+  public float OpeningSize
+  {
+    get => _openingSize; set
+    {
+      _openingSize = value;
+      var sidedOpeningSize = value / 4f;
+      stemUpper.transform.localPosition = new Vector2(0, 2.7896f + sidedOpeningSize);
+      stemLower.transform.localPosition = new Vector2(0, -2.8315f - sidedOpeningSize);
+      baseUpper.transform.localPosition = new Vector2(0, sidedOpeningSize);
+      baseLower.transform.localPosition = new Vector2(0, -sidedOpeningSize);
+
+      hitbox.offset = Vector2.zero;
+      hitbox.size = new Vector2(0.2f, value);
+
+      criticalZoneUpper.offset = Vector2.zero;
+      criticalZoneUpper.size = new Vector2(0.3f, value * 0.1875f);
+      criticalZoneLower.offset = Vector2.zero;
+      criticalZoneLower.size = new Vector2(0.3f, value * 0.1875f);
+    }
+  }
 
   private Transform stemUpper, stemLower;
   private Transform baseUpper, baseLower;
@@ -12,7 +33,7 @@ public class Pipe : MonoBehaviour
 
   private GameplayManager manager;
 
-  void Start()
+  void Awake()
   {
     stemUpper = transform.Find("PipeUpperStem");
     stemLower = transform.Find("PipeLowerStem");
@@ -32,25 +53,6 @@ public class Pipe : MonoBehaviour
     var newTransform = transform.position;
     newTransform.x = dist;
     transform.position = newTransform;
-
-    SetOpeningSize();
-  }
-
-  void SetOpeningSize()
-  {
-    var sidedOpeningSize = openingSize / 4f;
-    stemUpper.transform.localPosition = new Vector2(0, 2.7896f + sidedOpeningSize);
-    stemLower.transform.localPosition = new Vector2(0, -2.8315f - sidedOpeningSize);
-    baseUpper.transform.localPosition = new Vector2(0, sidedOpeningSize);
-    baseLower.transform.localPosition = new Vector2(0, -sidedOpeningSize);
-
-    hitbox.offset = Vector2.zero;
-    hitbox.size = new Vector2(0.2f, openingSize);
-
-    criticalZoneUpper.offset = Vector2.zero;
-    criticalZoneUpper.size = new Vector2(0.3f, openingSize * 0.1875f);
-    criticalZoneLower.offset = Vector2.zero;
-    criticalZoneLower.size = new Vector2(0.3f, openingSize * 0.1875f);
   }
 
   void OnTriggerEnter2D()

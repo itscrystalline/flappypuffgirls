@@ -43,7 +43,7 @@ public class PipeController : MonoBehaviour
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
     var spawnHeight = Random.Range(pipeHeightRandomBound1, pipeHeightRandomBound2);
-    pipe.openingSize = manager!.DifficultyScaledRandomRange(minPipeGap + manager!.player!.GetComponent<CircleCollider2D>().radius, 7.0f, manager!.localDifficulty, true);
+    pipe.OpeningSize = manager!.DifficultyScaledRandomRange(minPipeGap + manager!.player!.GetComponent<CircleCollider2D>().radius, 7.0f, manager!.localDifficulty, true);
     if (!lastPipe)
     {
       pipe.logicalPosition = manager!.viewportWidth;
