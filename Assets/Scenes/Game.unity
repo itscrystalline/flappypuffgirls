@@ -2057,7 +2057,7 @@ MonoBehaviour:
   playerBaseSpeed: 6
   playerJumpForce: 11
   difficultyScaleFactor: 1.05
-  difficultySpeedScaleFactor: 1.075
+  difficultySpeedScaleFactor: 1.05
   criticalDifficultyScaleFactor: 1.015
   noClip: 0
   difficultyScaledRandomBound1: 1.1
@@ -2126,8 +2126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bfb6ba8d66af7066b3e1f55d4265026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  pipeHeightRandomBound1: -2
-  pipeHeightRandomBound2: 2
+  pipeHeightRandomBound1: -2.5
+  pipeHeightRandomBound2: 2.5
   pipePrefabs:
   - {fileID: 1484155534249996142, guid: 7d62e878a2a2b243ea086aa93d84c2c4, type: 3}
   - {fileID: 1484155534249996142, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
@@ -2820,9 +2820,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 899559843}
   - {fileID: 1309102090}
   - {fileID: 81094463}
-  - {fileID: 899559843}
   - {fileID: 1537607540}
   - {fileID: 1609685458}
   - {fileID: 1742940305}
