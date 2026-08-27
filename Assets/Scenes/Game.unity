@@ -2126,8 +2126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bfb6ba8d66af7066b3e1f55d4265026, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  pipeHeightRandomBound1: -2.5
-  pipeHeightRandomBound2: 2.5
+  pipeHeightLowerBound: -1.5
+  pipeHeightUpperBound: 1.5
+  pipeOpeningUpperBound: 10
   pipePrefabs:
   - {fileID: 1484155534249996142, guid: 7d62e878a2a2b243ea086aa93d84c2c4, type: 3}
   - {fileID: 1484155534249996142, guid: fc9d764e6bc3af46bb8726c7384a41eb, type: 3}
