@@ -38,6 +38,6 @@ public class ScoreDisplayController : MonoBehaviour
 
   void Update()
   {
-    controller.Text = $"{Math.Round((game.localDifficulty - 1) * 10000)}".PadLeft(8, '0');
+    controller.Text = $"{game.Score}".PadLeft(8, '0');
   }
 }

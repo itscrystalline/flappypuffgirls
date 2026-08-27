@@ -50,8 +50,34 @@ public class GameplayManager : MonoBehaviour
   public GameObject? player;
   [HideInInspector]
   public float viewportWidth = 0.0f;
-
   public float playerSpeed = 0f;
+
+  private uint? _highScore;
+  public uint HighScore
+  {
+    get
+    {
+      if (_highScore == null)
+      {
+        if (PlayerPrefs.HasKey("HighScore"))
+        {
+          _highScore = (uint)PlayerPrefs.GetInt("HighScore");
+        }
+        else
+        {
+          PlayerPrefs.SetInt("HighScore", 0);
+          _highScore = 0;
+        }
+      }
+      return _highScore ?? 0;
+    }
+    set
+    {
+      _highScore = value;
+      PlayerPrefs.SetInt("HighScore", (int)value);
+    }
+  }
+  public uint Score { get => (uint)Math.Round((localDifficulty - 1) * 10000); }
 
   // Events
   public UnityEvent onMenu = new();
@@ -198,8 +224,6 @@ public class GameplayManager : MonoBehaviour
       return Random.Range(Mathf.Min(bound1, bound2), Mathf.Max(bound1, bound2));
     }
   }
-
-
 
 
   static Vector2 CentroidOf((Vector2, Vector2) vecs)
