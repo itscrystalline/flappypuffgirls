@@ -5,8 +5,7 @@ public class PipeKill : MonoBehaviour
   private GameplayManager game;
   void Start()
   {
-    game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
-
+    game = GameplayManager.INSTANCE;
     if (game.noClip)
     {
       var collider = GetComponent<BoxCollider2D>();
@@ -16,7 +15,10 @@ public class PipeKill : MonoBehaviour
   }
   void OnCollisionEnter2D(Collision2D col)
   {
-    if (!game.noClip)
-      game.PlayerDied();
+    if (!game.noClip && game.state != GameState.Died)
+    {
+      game.state = GameState.Died;
+      game.onDie.Invoke();
+    }
   }
 }

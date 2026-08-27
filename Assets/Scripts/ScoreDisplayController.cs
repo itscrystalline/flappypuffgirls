@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Coroutween;
 
 public class ScoreDisplayController : MonoBehaviour
 {
@@ -10,12 +11,12 @@ public class ScoreDisplayController : MonoBehaviour
 
   void Start()
   {
-    game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameplayManager>();
+    game = GameplayManager.INSTANCE;
     controller = GetComponent<TextController>();
     effect = transform.Find("ScoreTextEffect").GetComponent<TextController>();
 
-    game.onPipePass.AddListener(() => OnMilestone(5f));
-    game.onPipeCriticalPass.AddListener(() =>
+    game.pipeController.onPipePass.AddListener(() => OnMilestone(5f));
+    game.pipeController.onPipeCriticalPass.AddListener(() =>
     {
       OnMilestone(10f);
     });
@@ -28,18 +29,15 @@ public class ScoreDisplayController : MonoBehaviour
     StartCoroutine(DoScoreFade(increaseFontSizeBy));
   }
 
-  float EaseOutQuint(float x) => 1 - Mathf.Pow(1 - x, 5);
   IEnumerator DoScoreFade(float increaseFontSizeBy)
   {
     effect.gameObject.SetActive(true);
     var startingFontSize = effect.Size;
-    for (var step = 1; step <= 15; step++)
+    yield return Coroutines.RunOverTweened(250, (tweened) =>
     {
-      var ease = EaseOutQuint(step / 15f);
-      effect.Size = startingFontSize + (ease * increaseFontSizeBy);
-      effect.Alpha = 1 - ease;
-      yield return new WaitForFixedUpdate();
-    }
+      effect.Size = startingFontSize + (tweened * increaseFontSizeBy);
+      effect.Alpha = 1 - tweened;
+    }, Tween.EaseOutQuint);
     effect.Alpha = 0;
     effect.Size = startingFontSize;
     effect.gameObject.SetActive(false);
@@ -47,6 +45,6 @@ public class ScoreDisplayController : MonoBehaviour
 
   void Update()
   {
-    controller.Text = $"{Math.Round((game.localDifficulty - 1) * 10000)}".PadLeft(10, '0');
+    controller.Text = $"{Math.Round((game.localDifficulty - 1) * 10000)}".PadLeft(8, '0');
   }
 }

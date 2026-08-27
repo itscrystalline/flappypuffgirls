@@ -6,11 +6,8 @@ TagManager:
   tags:
   - PlayWall
   - Pipe
-  - UIPregame
-  - UIGame
-  - UIPostgame
   - Backdrop
-  - UIMenu
+  - UI
   layers:
   - Default
   - TransparentFX

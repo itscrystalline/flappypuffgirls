@@ -1,21 +1,23 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Coroutween;
 using Random = UnityEngine.Random;
 
+[Flags]
 public enum GameState
 {
-  Menu,
-  Pregame,
-  Playing,
-  Died
+  Menu = 0b0000_0001,
+  Pregame = 0b0000_0010,
+  Playing = 0b0000_0100,
+  Died = 0b0000_1000,
+  Postgame = 0b0001_0000
 }
 
 public class GameplayManager : MonoBehaviour
@@ -34,39 +36,30 @@ public class GameplayManager : MonoBehaviour
   [SerializeField]
   [Range(0.5f, 2.0f)]
   private float difficultyScaledRandomBound2 = 1.3f;
-  [SerializeField]
-  [Range(-6f, 0f)]
-  private float pipeHeightRandomBound1 = -2f;
-  [SerializeField]
-  [Range(0f, 6f)]
-  private float pipeHeightRandomBound2 = 2f;
-
-  public GameObject[] pipePrefabs = Array.Empty<GameObject>();
   public GameObject? backgroundDay = null, backgroundNight = null;
 
   // State
   [SerializeField]
-  private GameState _state = GameState.Menu;
+  public GameState state = GameState.Menu;
   public double localDifficulty = 1.0;
   public float playerDistance = 0.0f;
-  public int pipesPassed = 0;
 
-  private float minPipeGap = 0f;
-  private GameObject? player = null;
-  private Image? backdrop = null;
-  private Pipe? lastPipe = null;
-  private float viewportWidth = 0.0f;
-  private Dictionary<GameState, GameObject[]> uiElements = new Dictionary<GameState, GameObject[]>();
+  public PipeController? pipeController;
 
-  public float PlayerEffectiveSpeed() => PlayerEffectiveSpeed(localDifficulty);
-  public float PlayerEffectiveSpeed(double difficulty)
-  {
-    return (float)(playerBaseSpeed + Math.Pow(difficulty, difficultySpeedScaleFactor));
-  }
+  public GameObject? player;
+  private Image? backdrop;
+  [HideInInspector]
+  public float viewportWidth = 0.0f;
+  private UIElement[] uiElements = Array.Empty<UIElement>();
+
+  public float playerSpeed = 0f;
 
   // Events
-  public UnityEvent onPipePass = new();
-  public UnityEvent onPipeCriticalPass = new();
+  public UnityEvent onMenu = new();
+  public UnityEvent onPregame = new();
+  public UnityEvent onPlay = new();
+  public UnityEvent onDie = new();
+  public UnityEvent onPostgame = new();
 
 
   [HideInInspector]
@@ -74,60 +67,27 @@ public class GameplayManager : MonoBehaviour
   private InputAction? reset;
   private InputAction? jump;
 
-
-  public GameState State
-  {
-    get => _state; set
-    {
-      _state = value;
-      foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == value);
-      switch (value)
-      {
-        case GameState.Menu:
-          player!.SetActive(false);
-          DoBackdropFade(0, 0.8313725490f, x => x);
-          break;
-        case GameState.Pregame:
-          break;
-        case GameState.Playing:
-          player!.SetActive(true);
-          break;
-        case GameState.Died:
-          print("Died!!");
-          break;
-      }
-    }
-  }
-
   void Awake()
   {
-    if (INSTANCE != null)
-    {
-      Destroy(gameObject);
-      return;
-    }
-    DontDestroyOnLoad(gameObject);
     INSTANCE = this;
+    pipeController = GetComponent<PipeController>();
+
+    player = GameObject.FindGameObjectWithTag("Player");
+    backdrop = GameObject.FindGameObjectWithTag("Backdrop").GetComponent<Image>();
+    uiElements = GameObject.FindGameObjectsWithTag("UI").Select(g => g.GetComponent<UIElement>()).ToArray();
+
     reset = InputSystem.actions.FindAction("Reset");
+    jump = InputSystem.actions.FindAction("Jump");
   }
 
   void Start()
   {
-    player = GameObject.FindGameObjectWithTag("Player");
-    player!.SetActive(false);
-
-    jump = InputSystem.actions.FindAction("Jump");
-
-    minPipeGap = playerJumpForce * playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * player.GetComponent<Rigidbody2D>().gravityScale) * 2f);
-
     var wallColliders = GameObject.FindGameObjectsWithTag("PlayWall").Select(g => g.GetComponent<BoxCollider2D>()).ToArray();
     var camera = Camera.main;
     var viewportHeight = camera.orthographicSize;
     var viewportWidth = viewportHeight * camera.aspect;
     this.viewportWidth = viewportWidth;
     Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
-
-    backdrop = GameObject.FindGameObjectWithTag("Backdrop").GetComponent<Image>();
 
     var left = (new Vector2(-viewportWidth, -viewportHeight), new Vector2(-0.5f, viewportHeight));
     var right = (new Vector2(0.5f, -viewportHeight), new Vector2(viewportWidth, viewportHeight));
@@ -149,15 +109,54 @@ public class GameplayManager : MonoBehaviour
       sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
     }
 
-    uiElements[GameState.Menu] = GameObject.FindGameObjectsWithTag("UIMenu");
-    uiElements[GameState.Pregame] = GameObject.FindGameObjectsWithTag("UIPregame");
-    uiElements[GameState.Playing] = GameObject.FindGameObjectsWithTag("UIGame");
-    uiElements[GameState.Died] = GameObject.FindGameObjectsWithTag("UIPostgame");
+    player!.SetActive(false);
 
-    foreach ((GameState g, GameObject[] elems) in uiElements) foreach (var e in elems) e.SetActive(g == State);
+    pipeController!.onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
 
-    onPipePass.AddListener(() => pipesPassed += 1);
-    onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
+    onMenu.AddListener(UpdateUIState);
+    onPregame.AddListener(UpdateUIState);
+    onPlay.AddListener(UpdateUIState);
+    onDie.AddListener(UpdateUIState);
+    onPostgame.AddListener(UpdateUIState);
+
+    void PrintState() => print(state);
+    onMenu.AddListener(PrintState);
+    onPregame.AddListener(PrintState);
+    onPlay.AddListener(PrintState);
+    onDie.AddListener(PrintState);
+    onPostgame.AddListener(PrintState);
+
+    onPregame.AddListener(() => StartCoroutine(PrepareStartGame()));
+    onPlay.AddListener(StartGame);
+    onDie.AddListener(() => StartCoroutine(PlayerDied()));
+    onPostgame.AddListener(PostGame);
+
+    foreach (var e in uiElements)
+    {
+      if (e.associatedStates.HasFlag(GameState.Menu))
+      {
+        e.FadeInImmeadiate();
+      }
+      else
+      {
+        e.FadeOutImmeadiate();
+      }
+    }
+  }
+
+  void UpdateUIState()
+  {
+    foreach (var e in uiElements)
+    {
+      if (e.associatedStates.HasFlag(state))
+      {
+        e.FadeIn();
+      }
+      else
+      {
+        e.FadeOut();
+      }
+    }
   }
 
   void Update()
@@ -167,82 +166,57 @@ public class GameplayManager : MonoBehaviour
       ResetGame(true);
     }
 
-    if (jump!.WasPerformedThisFrame() && State == GameState.Menu)
+    if (jump!.WasPerformedThisFrame() && state == GameState.Menu)
     {
-      StartGame();
+      state = GameState.Pregame;
+      onPregame.Invoke();
     }
   }
   void FixedUpdate()
   {
-    if (State == GameState.Playing || State == GameState.Menu)
+    if (state == GameState.Playing || state == GameState.Menu)
     {
-      if (State == GameState.Playing) localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
-      playerDistance += PlayerEffectiveSpeed() * Time.fixedDeltaTime;
+      if (state == GameState.Playing) localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
+      playerSpeed = (float)(playerBaseSpeed + Math.Pow(localDifficulty, difficultySpeedScaleFactor));
+      playerDistance += playerSpeed * Time.fixedDeltaTime;
     }
-    SpawnNextPipe();
   }
 
-  public void StartGame()
+  IEnumerator PrepareStartGame()
   {
-    DoBackdropFade(750, 0f, x => 1 - Mathf.Pow(1 - x, 5));
-    StartCoroutine(RunOver(750, (_, progress) =>
-    {
-      if (progress == 0)
-      {
-        State = GameState.Pregame;
-      }
-      else if (progress == 499)
-      {
-        State = GameState.Playing;
-        Debug.Log("Started!");
-        ResetGame(false);
-      }
-    }));
+    yield return DoUIFade(backdrop!, 750, 0f, x => 1 - Mathf.Pow(1 - x, 5));
+    state = GameState.Playing;
+    onPlay.Invoke();
+    ResetGame(false);
   }
-  public void PlayerDied()
+  void StartGame()
   {
-    StartCoroutine(RunOver(1000, (_, i) =>
-    {
-      if (i == 999) State = GameState.Died;
-    }));
-    DoBackdropFade(750, 0.9f, x => 1 - Mathf.Pow(1 - x, 3));
+    player!.SetActive(true);
+  }
+  IEnumerator PlayerDied()
+  {
+    StartCoroutine(DoUIFade(backdrop!, 750, 0.9f, x => 1 - Mathf.Pow(1 - x, 3)));
+    yield return new WaitForSeconds(1f);
+    state = GameState.Postgame;
+    onPostgame.Invoke();
+  }
+  void PostGame()
+  {
+    player!.SetActive(false);
   }
 
   public void ResetGame(bool toMenu = true)
   {
     localDifficulty = 1.0;
     playerDistance = 0.0f;
-    pipesPassed = 0;
+    pipeController!.Reset();
     player!.transform.position = Vector3.zero;
     player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
-    foreach (var pipe in GameObject.FindGameObjectsWithTag("Pipe")) Destroy(pipe);
-    if (toMenu) State = GameState.Menu;
+    if (toMenu) { state = GameState.Menu; onMenu.Invoke(); }
   }
 
-  private void SpawnNextPipe()
-  {
-    if (lastPipe && lastPipe.logicalPosition - playerDistance > viewportWidth) return;
-    if (pipePrefabs.Length == 0) return;
 
-    var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
-    var spawnHeight = Random.Range(pipeHeightRandomBound1, pipeHeightRandomBound2);
-    pipe.openingSize = DifficultyScaledRandomRange(minPipeGap + player!.GetComponent<CircleCollider2D>().radius, 7.0f, localDifficulty, true);
-    if (!lastPipe)
-    {
-      pipe.logicalPosition = viewportWidth;
-      pipe.transform.position = new Vector2(viewportWidth, spawnHeight);
-    }
-    else
-    {
-      pipe.logicalPosition = lastPipe.logicalPosition + 10;
-      pipe.transform.position = new Vector2(pipe.logicalPosition - playerDistance, spawnHeight);
-    }
-    lastPipe = pipe;
-
-    SpawnNextPipe();
-  }
-
-  float DifficultyScaledRandomRange(float min, float max, double difficulty, bool invert)
+  public float DifficultyScaledRandomRange(float min, float max, double difficulty, bool invert)
   {
     var bound1 = Mathf.Clamp(Mathf.Pow((float)difficulty, difficultyScaledRandomBound1), min, max);
     var bound2 = Mathf.Clamp(Mathf.Pow((float)difficulty, difficultyScaledRandomBound2), min, max);
@@ -256,37 +230,26 @@ public class GameplayManager : MonoBehaviour
     }
   }
 
-  void DoBackdropFade(uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, Action? callback = null)
+  IEnumerator DoUIFade(Image image, uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, Action? callback = null)
   {
-    Color startColor = backdrop!.color;
+    Color startColor = image.color;
     if (milliseconds == 0)
     {
-      backdrop!.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
+      image.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
       goto end;
     }
 
-    IEnumerator DoBackdropFadeImpl(Color startColor, uint milliseconds, float targetAlpha, Func<float, float> tweenFunction)
+    float startAlpha = backdrop!.color.a;
+    yield return Coroutines.RunOver(milliseconds, (progress, _) =>
     {
-      float startAlpha = backdrop!.color.a;
-      yield return RunOver(milliseconds, (progress, _) =>
-      {
-        backdrop!.color = new Color(startColor.r, startColor.g, startColor.b, startAlpha + ((targetAlpha - startAlpha) * tweenFunction(progress)));
-      });
-    }
-    StartCoroutine(DoBackdropFadeImpl(startColor, milliseconds, targetAlpha, tweenFunction));
+      image.color = new Color(startColor.r, startColor.g, startColor.b, startAlpha + ((targetAlpha - startAlpha) * tweenFunction(progress)));
+    });
 
   end:
     callback?.Invoke();
   }
 
-  static IEnumerator RunOver(uint milliseconds, Action<float, uint> runOnProgress)
-  {
-    for (uint i = 0; i < milliseconds; i++)
-    {
-      runOnProgress((float)i / milliseconds, i);
-      yield return new WaitForSeconds(0.001f);
-    }
-  }
+
 
   static Vector2 CentroidOf((Vector2, Vector2) vecs)
   {

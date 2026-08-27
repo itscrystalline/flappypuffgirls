@@ -2,8 +2,10 @@
 
 using UnityEngine;
 using TMPro;
+using System.Collections;
+using Coroutween;
 
-public class TextController : MonoBehaviour
+public class TextController : MonoBehaviour, IUIElementAnim
 {
   private TMP_Text[] Children { get => GetComponentsInChildren<TMP_Text>(true); }
 
@@ -35,5 +37,31 @@ public class TextController : MonoBehaviour
       alphaInner = value;
       foreach (var t in Children) t.color = new Color(t.color.r, t.color.g, t.color.b, value);
     }
+  }
+
+  public IEnumerator FadeIn()
+  {
+    yield return Coroutines.RunOver(100, (a, _) =>
+    {
+      Alpha = a;
+    });
+  }
+
+  public IEnumerator FadeOut()
+  {
+    yield return Coroutines.RunOver(100, (a, _) =>
+    {
+      Alpha = 1 - a;
+    });
+  }
+
+  public void FadeInImmeadiate()
+  {
+    Alpha = 1f;
+  }
+
+  public void FadeOutImmeadiate()
+  {
+    Alpha = 0f;
   }
 }
