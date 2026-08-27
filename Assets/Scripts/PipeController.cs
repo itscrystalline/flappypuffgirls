@@ -11,10 +11,13 @@ public class PipeController : MonoBehaviour
 
   [SerializeField]
   [Range(-6f, 0f)]
-  private float pipeHeightRandomBound1 = -2f;
+  private float pipeHeightLowerBound = -2f;
   [SerializeField]
   [Range(0f, 6f)]
-  private float pipeHeightRandomBound2 = 2f;
+  private float pipeHeightUpperBound = 2f;
+  [SerializeField]
+  [Range(0f, 20f)]
+  private float pipeOpeningUpperBound = 12f;
 
   public GameObject[] pipePrefabs = Array.Empty<GameObject>();
   public int pipesPassed = 0;
@@ -28,6 +31,7 @@ public class PipeController : MonoBehaviour
   {
     manager = GameplayManager.INSTANCE;
     minPipeGap = manager!.playerJumpForce * manager!.playerJumpForce / (Mathf.Abs(Physics2D.gravity.y * manager!.player!.GetComponent<Rigidbody2D>().gravityScale) * 2f);
+    minPipeGap += manager!.player!.GetComponent<CircleCollider2D>().radius;
     onPipePass.AddListener(() => pipesPassed += 1);
   }
 
@@ -42,8 +46,8 @@ public class PipeController : MonoBehaviour
     if (pipePrefabs.Length == 0) return;
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
-    var spawnHeight = Random.Range(pipeHeightRandomBound1, pipeHeightRandomBound2);
-    pipe.OpeningSize = manager!.DifficultyScaledRandomRange(minPipeGap + manager!.player!.GetComponent<CircleCollider2D>().radius, 7.0f, manager!.localDifficulty, true);
+    var spawnHeight = Random.Range(pipeHeightLowerBound, pipeHeightUpperBound);
+    pipe.OpeningSize = manager!.DifficultyScaledRandomRange(minPipeGap, Mathf.Max(minPipeGap, pipeOpeningUpperBound), manager!.localDifficulty, true);
     if (!lastPipe)
     {
       pipe.logicalPosition = manager!.viewportWidth;
