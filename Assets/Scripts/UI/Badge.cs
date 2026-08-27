@@ -72,7 +72,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     var curScore = game.Score;
     var highScore = game.HighScore;
     var max = Math.Max(curScore, highScore);
-    yield return Coroutines.RunOverTweened(Math.Min(2000, max), tw =>
+    yield return Coroutines.RunOverTweened(Math.Min(1000, max), tw =>
     {
       var cnt = (uint)(max * tw);
       currentScore.Text = $"{Math.Min(cnt, curScore)}".PadLeft(8, '0');
