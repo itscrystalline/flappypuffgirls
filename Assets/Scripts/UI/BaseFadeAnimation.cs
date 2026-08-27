@@ -18,7 +18,7 @@ public class BaseFadeAnimation : MonoBehaviour, IUIElementAnim
 
   public IEnumerator FadeIn()
   {
-    yield return Coroutines.RunOverTweened(250, tw =>
+    yield return Coroutines.RunOverTweened(100, tw =>
     {
       var alpha = Mathf.Lerp(0f, 1f, tw);
       foreach (var img in images)
@@ -46,7 +46,7 @@ public class BaseFadeAnimation : MonoBehaviour, IUIElementAnim
 
   public IEnumerator FadeOut()
   {
-    yield return Coroutines.RunOverTweened(250, tw =>
+    yield return Coroutines.RunOverTweened(100, tw =>
     {
       var alpha = Mathf.Lerp(1f, 0f, tw);
       foreach (var img in images)

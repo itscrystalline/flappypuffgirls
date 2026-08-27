@@ -45,12 +45,11 @@ public class GameplayManager : MonoBehaviour
   public float playerDistance = 0.0f;
 
   public PipeController? pipeController;
+  public UIController? uiController;
 
   public GameObject? player;
-  private Image? backdrop;
   [HideInInspector]
   public float viewportWidth = 0.0f;
-  private UIElement[] uiElements = Array.Empty<UIElement>();
 
   public float playerSpeed = 0f;
 
@@ -71,10 +70,9 @@ public class GameplayManager : MonoBehaviour
   {
     INSTANCE = this;
     pipeController = GetComponent<PipeController>();
+    uiController = GetComponent<UIController>();
 
     player = GameObject.FindGameObjectWithTag("Player");
-    backdrop = GameObject.FindGameObjectWithTag("Backdrop").GetComponent<Image>();
-    uiElements = GameObject.FindGameObjectsWithTag("UI").Select(g => g.GetComponent<UIElement>()).ToArray();
 
     reset = InputSystem.actions.FindAction("Reset");
     jump = InputSystem.actions.FindAction("Jump");
@@ -113,11 +111,6 @@ public class GameplayManager : MonoBehaviour
 
     pipeController!.onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
 
-    onMenu.AddListener(UpdateUIState);
-    onPregame.AddListener(UpdateUIState);
-    onPlay.AddListener(UpdateUIState);
-    onDie.AddListener(UpdateUIState);
-    onPostgame.AddListener(UpdateUIState);
 
     void PrintState() => print(state);
     onMenu.AddListener(PrintState);
@@ -130,34 +123,8 @@ public class GameplayManager : MonoBehaviour
     onPlay.AddListener(StartGame);
     onDie.AddListener(() => StartCoroutine(PlayerDied()));
     onPostgame.AddListener(PostGame);
-
-    foreach (var e in uiElements)
-    {
-      if (e.associatedStates.HasFlag(GameState.Menu))
-      {
-        e.FadeInImmeadiate();
-      }
-      else
-      {
-        e.FadeOutImmeadiate();
-      }
-    }
   }
 
-  void UpdateUIState()
-  {
-    foreach (var e in uiElements)
-    {
-      if (e.associatedStates.HasFlag(state))
-      {
-        e.FadeIn();
-      }
-      else
-      {
-        e.FadeOut();
-      }
-    }
-  }
 
   void Update()
   {
@@ -178,15 +145,16 @@ public class GameplayManager : MonoBehaviour
     {
       if (state == GameState.Playing) localDifficulty *= ((difficultyScaleFactor - 1) * Time.fixedDeltaTime) + 1;
       playerSpeed = (float)(playerBaseSpeed + Math.Pow(localDifficulty, difficultySpeedScaleFactor));
-      playerDistance += playerSpeed * Time.fixedDeltaTime;
     }
+    playerDistance += playerSpeed * Time.fixedDeltaTime;
   }
 
   IEnumerator PrepareStartGame()
   {
-    yield return DoUIFade(backdrop!, 750, 0f, x => 1 - Mathf.Pow(1 - x, 5));
+    yield return uiController!.FadeBackdrop(750, 1f, Tween.EaseOutQuint);
     state = GameState.Playing;
     onPlay.Invoke();
+    StartCoroutine(uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint));
     ResetGame(false);
   }
   void StartGame()
@@ -195,8 +163,9 @@ public class GameplayManager : MonoBehaviour
   }
   IEnumerator PlayerDied()
   {
-    StartCoroutine(DoUIFade(backdrop!, 750, 0.9f, x => 1 - Mathf.Pow(1 - x, 3)));
-    yield return new WaitForSeconds(1f);
+    StartCoroutine(uiController!.FadeBackdrop(750, 0.9f, Tween.EaseOutCubic));
+    var finalSpeed = playerSpeed;
+    yield return Coroutines.RunOverTweened(1000, tw => playerSpeed = Mathf.Lerp(finalSpeed, 0, tw), Tween.EaseOutQuint);
     state = GameState.Postgame;
     onPostgame.Invoke();
   }
@@ -230,24 +199,6 @@ public class GameplayManager : MonoBehaviour
     }
   }
 
-  IEnumerator DoUIFade(Image image, uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, Action? callback = null)
-  {
-    Color startColor = image.color;
-    if (milliseconds == 0)
-    {
-      image.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
-      goto end;
-    }
-
-    float startAlpha = backdrop!.color.a;
-    yield return Coroutines.RunOver(milliseconds, (progress, _) =>
-    {
-      image.color = new Color(startColor.r, startColor.g, startColor.b, startAlpha + ((targetAlpha - startAlpha) * tweenFunction(progress)));
-    });
-
-  end:
-    callback?.Invoke();
-  }
 
 
 

@@ -7,40 +7,33 @@ public class ScoreDisplayController : MonoBehaviour
 {
   private GameplayManager game;
   private TextController controller;
-  private TextController effect;
 
   void Start()
   {
     game = GameplayManager.INSTANCE;
     controller = GetComponent<TextController>();
-    effect = transform.Find("ScoreTextEffect").GetComponent<TextController>();
 
     game.pipeController.onPipePass.AddListener(() => OnMilestone(5f));
-    game.pipeController.onPipeCriticalPass.AddListener(() =>
-    {
-      OnMilestone(10f);
-    });
-
-    effect.gameObject.SetActive(false);
+    game.pipeController.onPipeCriticalPass.AddListener(() => OnMilestone(10f));
   }
 
   void OnMilestone(float increaseFontSizeBy)
   {
-    StartCoroutine(DoScoreFade(increaseFontSizeBy));
+    var dupe = Instantiate(gameObject, transform.parent).GetComponent<TextController>();
+    Destroy(dupe.gameObject.GetComponent<ScoreDisplayController>());
+    StartCoroutine(DoScoreFade(dupe, increaseFontSizeBy));
   }
 
-  IEnumerator DoScoreFade(float increaseFontSizeBy)
+  IEnumerator DoScoreFade(TextController dupe, float increaseFontSizeBy)
   {
-    effect.gameObject.SetActive(true);
-    var startingFontSize = effect.Size;
-    yield return Coroutines.RunOverTweened(250, (tweened) =>
+    dupe.gameObject.SetActive(true);
+    var startingFontSize = dupe.Size;
+    yield return Coroutines.RunOverTweened(250, tw =>
     {
-      effect.Size = startingFontSize + (tweened * increaseFontSizeBy);
-      effect.Alpha = 1 - tweened;
+      dupe.Size = Mathf.Lerp(startingFontSize, startingFontSize + increaseFontSizeBy, tw);
+      dupe.Alpha = 1 - tw;
     }, Tween.EaseOutQuint);
-    effect.Alpha = 0;
-    effect.Size = startingFontSize;
-    effect.gameObject.SetActive(false);
+    Destroy(dupe.gameObject);
   }
 
   void Update()
