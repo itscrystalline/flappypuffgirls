@@ -132,10 +132,7 @@ public class GameplayManager : MonoBehaviour
       sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
     }
 
-    player!.SetActive(false);
-
     pipeController!.onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
-
 
     void PrintState() => print(state);
     onMenu.AddListener(PrintState);
@@ -144,10 +141,13 @@ public class GameplayManager : MonoBehaviour
     onDie.AddListener(PrintState);
     onPostgame.AddListener(PrintState);
 
+    onMenu.AddListener(() => player!.SetActive(false));
     onPregame.AddListener(() => _ = PrepareStartGame());
     onPlay.AddListener(StartGame);
     onDie.AddListener(() => _ = PlayerDied());
     onPostgame.AddListener(PostGame);
+
+    onMenu.Invoke();
   }
 
 
@@ -199,14 +199,18 @@ public class GameplayManager : MonoBehaviour
     player!.SetActive(false);
   }
 
-  public void ResetGame(bool toMenu = true)
+  public void ResetGame(bool toMenu)
   {
     localDifficulty = 1.0;
     playerDistance = 0.0f;
     pipeController!.Reset();
     player!.transform.position = Vector3.zero;
     player!.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0, playerJumpForce);
-    if (toMenu) { state = GameState.Menu; onMenu.Invoke(); }
+    if (toMenu)
+    {
+      state = GameState.Menu;
+      onMenu.Invoke();
+    }
   }
 
 
