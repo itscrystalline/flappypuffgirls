@@ -39,10 +39,24 @@ namespace Coroutween
   {
     public static async Awaitable RunOver(uint milliseconds, Action<float, uint> runOnProgress)
     {
-      for (uint i = 1; i <= milliseconds; i++)
+      if (milliseconds == 0)
       {
-        runOnProgress((float)i / milliseconds, i);
-        await Awaitable.WaitForSecondsAsync(0.001f);
+        runOnProgress(1f, 0);
+        return;
+      }
+
+      double start = Time.timeAsDouble;
+
+      while (true)
+      {
+        await Awaitable.NextFrameAsync();
+        double elapsed = (Time.timeAsDouble - start) * 1000.0;
+        if (elapsed >= milliseconds)
+        {
+          runOnProgress(1f, milliseconds);
+          break;
+        }
+        runOnProgress((float)elapsed / milliseconds, (uint)elapsed);
       }
     }
     public static async Awaitable RunOverTweened(uint milliseconds, Action<float> runOnProgressTweened, Func<float, float> tweenFunction = null)
