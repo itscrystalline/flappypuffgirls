@@ -144,9 +144,9 @@ public class GameplayManager : MonoBehaviour
     onDie.AddListener(PrintState);
     onPostgame.AddListener(PrintState);
 
-    onPregame.AddListener(() => PrepareStartGame());
+    onPregame.AddListener(() => _ = PrepareStartGame());
     onPlay.AddListener(StartGame);
-    onDie.AddListener(() => PlayerDied());
+    onDie.AddListener(() => _ = PlayerDied());
     onPostgame.AddListener(PostGame);
   }
 
@@ -179,7 +179,7 @@ public class GameplayManager : MonoBehaviour
     await uiController!.FadeBackdrop(750, 1f, Tween.EaseOutQuint);
     state = GameState.Playing;
     onPlay.Invoke();
-    uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint);
+    _ = uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint);
     ResetGame(false);
   }
   void StartGame()
@@ -188,7 +188,7 @@ public class GameplayManager : MonoBehaviour
   }
   async Awaitable PlayerDied()
   {
-    uiController!.FadeBackdrop(750, 0.9f, Tween.EaseOutCubic);
+    _ = uiController!.FadeBackdrop(750, 0.9f, Tween.EaseOutCubic);
     var finalSpeed = playerSpeed;
     await Coroutines.RunOverTweened(1000, tw => playerSpeed = Mathf.Lerp(finalSpeed, 0, tw), Tween.EaseOutQuint);
     state = GameState.Postgame;

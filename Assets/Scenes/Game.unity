@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &23496060
 RectTransform:
   m_ObjectHideFlags: 0
@@ -301,6 +301,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4441a4242a36dc59f41e803bfc0a85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  currentScore: {fileID: 436377812}
+  bestScore: {fileID: 1168225796}
+  bronzeCoin: {fileID: 178240183}
+  silverCoin: {fileID: 1479667435}
+  goldCoin: {fileID: 23496059}
 --- !u!1 &121293980
 GameObject:
   m_ObjectHideFlags: 0
@@ -500,7 +505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &178240184
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2571,7 +2576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1479667436
 RectTransform:
   m_ObjectHideFlags: 0

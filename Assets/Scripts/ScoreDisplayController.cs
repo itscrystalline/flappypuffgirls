@@ -20,7 +20,7 @@ public class ScoreDisplayController : MonoBehaviour
   {
     var dupe = Instantiate(gameObject, transform.parent).GetComponent<TextController>();
     Destroy(dupe.gameObject.GetComponent<ScoreDisplayController>());
-    DoScoreFade(dupe, increaseFontSizeBy);
+    _ = DoScoreFade(dupe, increaseFontSizeBy);
   }
 
   async Awaitable DoScoreFade(TextController dupe, float increaseFontSizeBy)

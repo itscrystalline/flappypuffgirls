@@ -32,7 +32,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   public async Awaitable FadeIn()
   {
-    RunDisplay();
+    _ = RunDisplay();
     await Coroutines.RunOverTweened(500, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
@@ -68,6 +68,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   async Awaitable RunDisplay()
   {
+    await Awaitable.WaitForSecondsAsync(0.1f);
     var curScore = game.Score;
     var highScore = game.HighScore;
     var max = Math.Max(curScore, highScore);
@@ -101,7 +102,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     var randomAngle = Random.Range(-30, 30);
     // TODO: FIXME: what about the 3 different positions ???????????????????????????????
     // var randomOffset = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
-    Coroutines.RunOverTweened(250, tw =>
+    _ = Coroutines.RunOverTweened(250, tw =>
     {
       rect.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(0, randomAngle, tw));
       // rect.anchoredPosition += randomOffset;
