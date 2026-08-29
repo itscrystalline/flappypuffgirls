@@ -1,10 +1,8 @@
 using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-  private InputAction jump;
   private GameplayManager game;
   private Rigidbody2D rb;
 
@@ -14,7 +12,6 @@ public class PlayerController : MonoBehaviour
 
   void Awake()
   {
-    jump = InputSystem.actions.FindAction("Jump");
     rb = gameObject.GetComponent<Rigidbody2D>();
     _girls = girls.Select(t => (t, CartesianToPolar(t.localPosition))).ToArray();
   }
@@ -22,6 +19,7 @@ public class PlayerController : MonoBehaviour
   void Start()
   {
     game = GameplayManager.INSTANCE;
+    game.onJump.AddListener(() => rb.linearVelocity = new Vector2(0, game.playerJumpForce));
   }
 
   // Update is called once per frame
@@ -38,10 +36,6 @@ public class PlayerController : MonoBehaviour
       gt.localEulerAngles = new Vector3(0, 0, lookAngle * Mathf.Rad2Deg);
     }
 
-    if (jump.WasPerformedThisFrame())
-    {
-      rb.linearVelocity = new Vector2(0, game.playerJumpForce);
-    }
   }
 
   /// x -> r
