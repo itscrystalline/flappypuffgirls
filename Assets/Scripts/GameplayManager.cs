@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Coroutween;
 using Random = UnityEngine.Random;
 
@@ -94,11 +93,6 @@ public class GameplayManager : MonoBehaviour
   void Awake()
   {
     INSTANCE = this;
-    pipeController = GetComponent<PipeController>();
-    uiController = GetComponent<UIController>();
-
-    player = GameObject.FindGameObjectWithTag("Player");
-
     reset = InputSystem.actions.FindAction("Reset");
     jump = InputSystem.actions.FindAction("Jump");
   }

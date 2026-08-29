@@ -8,13 +8,15 @@ public class PlayerController : MonoBehaviour
   private GameplayManager game;
   private Rigidbody2D rb;
 
-  private (Transform, Vector2)[] girls;
+  [SerializeField]
+  private Transform[] girls;
+  private (Transform, Vector2)[] _girls;
 
   void Awake()
   {
     jump = InputSystem.actions.FindAction("Jump");
     rb = gameObject.GetComponent<Rigidbody2D>();
-    girls = transform.Cast<Transform>().Select(t => (t, CartesianToPolar(t.localPosition))).ToArray();
+    _girls = girls.Select(t => (t, CartesianToPolar(t.localPosition))).ToArray();
   }
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
@@ -30,7 +32,7 @@ public class PlayerController : MonoBehaviour
     var normLook = new Vector2(velX, velY).normalized;
     var lookAngle = Mathf.Atan2(normLook.y, normLook.x);
 
-    foreach ((var gt, var gtp) in girls)
+    foreach ((var gt, var gtp) in _girls)
     {
       gt.localPosition = PolarToCartesian(new Vector2(gtp.x, gtp.y + lookAngle * 0.35f));
       gt.localEulerAngles = new Vector3(0, 0, lookAngle * Mathf.Rad2Deg);

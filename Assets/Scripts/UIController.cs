@@ -8,12 +8,12 @@ public class UIController : MonoBehaviour
 {
   private GameplayManager manager;
   private UIElement[] uiElements = Array.Empty<UIElement>();
+  [SerializeField]
   private Image backdrop;
 
   void Awake()
   {
     uiElements = GameObject.FindGameObjectsWithTag("UI").Select(g => g.GetComponent<UIElement>()).ToArray();
-    backdrop = GameObject.FindGameObjectWithTag("Backdrop").GetComponent<Image>();
   }
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()

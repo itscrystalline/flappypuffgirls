@@ -10,20 +10,19 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   private Vector2 originalPos;
   const float NEW_Y = 400;
-  private Image[] images = Array.Empty<Image>();
-  private TextController[] texts = Array.Empty<TextController>();
+  [SerializeField]
+  private Image[] images;
+  [SerializeField]
+  private TextController[] texts;
 
   public TextController currentScore;
   public TextController bestScore;
+  public TextController resetText;
+
   public GameObject bronzeCoin;
   public GameObject silverCoin;
   public GameObject goldCoin;
 
-  void Awake()
-  {
-    images = GetComponentsInChildren<Image>();
-    texts = GetComponentsInChildren<TextController>();
-  }
   void Start()
   {
     game = GameplayManager.INSTANCE;
@@ -33,7 +32,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
   public async Awaitable FadeIn()
   {
     _ = RunDisplay();
-    await Coroutines.RunOverTweened(500, (tw) =>
+    await Coroutines.RunOverTweened(1500, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
     }, Tween.EaseOutBounce);
@@ -41,17 +40,13 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   public async Awaitable FadeOut()
   {
-    await Coroutines.RunOver(50, (tw, _) =>
+    await Coroutines.RunOver(150, (tw, _) =>
     {
       var alpha = Mathf.Lerp(1f, 0f, tw);
       foreach (var img in images)
-      {
         img.color = new Color(img.color.r, img.color.g, img.color.b, alpha);
-      }
       foreach (var text in texts)
-      {
         text.Alpha = alpha;
-      }
     });
     transform.localPosition = new Vector2(originalPos.x, NEW_Y);
   }
@@ -68,11 +63,11 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   async Awaitable RunDisplay()
   {
-    await Awaitable.WaitForSecondsAsync(0.1f);
+    await Awaitable.WaitForSecondsAsync(0.5f);
     var curScore = game.Score;
     var highScore = game.HighScore;
     var max = Math.Max(curScore, highScore);
-    await Coroutines.RunOverTweened(Math.Min(1000, max), tw =>
+    await Coroutines.RunOverTweened(Math.Min(2500, max), tw =>
     {
       var cnt = (uint)(max * tw);
       currentScore.Text = $"{Math.Min(cnt, curScore)}".PadLeft(8, '0');
@@ -93,6 +88,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
     {
       await PlaceMedal(bronzeCoin);
     }
+    await Awaitable.WaitForSecondsAsync(0.2f);
+    await BlinkRestartText();
   }
   async Awaitable PlaceMedal(GameObject medal)
   {
@@ -102,12 +99,12 @@ public class Badge : MonoBehaviour, IUIElementAnim
     var randomAngle = Random.Range(-30, 30);
     // TODO: FIXME: what about the 3 different positions ???????????????????????????????
     // var randomOffset = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
-    _ = Coroutines.RunOverTweened(250, tw =>
+    _ = Coroutines.RunOverTweened(500, tw =>
     {
       rect.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(0, randomAngle, tw));
       // rect.anchoredPosition += randomOffset;
     }, Tween.EaseOutCubic);
-    await Coroutines.RunOverTweened(250, tw =>
+    await Coroutines.RunOverTweened(500, tw =>
     {
       if (tw <= 0.25f)
       {
@@ -117,5 +114,9 @@ public class Badge : MonoBehaviour, IUIElementAnim
       var twScale = Mathf.Lerp(4f, 1f, tw);
       medal.transform.localScale = new Vector2(twScale, twScale);
     }, Tween.EaseOutBounce);
+  }
+  async Awaitable BlinkRestartText()
+  {
+    throw new NotImplementedException();
   }
 }
