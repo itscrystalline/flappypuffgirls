@@ -34,7 +34,8 @@ public class GameplayManager : MonoBehaviour
   [SerializeField]
   [Range(0.5f, 2.0f)]
   private float difficultyScaledRandomBound2 = 1.3f;
-  public GameObject? backgroundDay = null, backgroundNight = null;
+  public GameObject[] dayBackgrounds = Array.Empty<GameObject>();
+  public GameObject[] nightBackgrounds = Array.Empty<GameObject>();
 
   // State
   [SerializeField]
@@ -84,6 +85,9 @@ public class GameplayManager : MonoBehaviour
   public UnityEvent onDie = new();
   public UnityEvent onPostgame = new();
 
+  public UnityEvent onJump = new();
+  public UnityEvent onReset = new();
+
 
   [HideInInspector]
   public static GameplayManager? INSTANCE = null;
@@ -117,12 +121,13 @@ public class GameplayManager : MonoBehaviour
       box.size = SizeOf(corners);
     }
 
-    foreach ((var bkgrnd, int idx) in new[] { backgroundDay!, backgroundNight! }.Select((g, i) => (g, i)))
+    foreach ((var bkgrnd, int idx) in dayBackgrounds.Concat(nightBackgrounds).Select((g, i) => (g, i)))
     {
       var sprite = bkgrnd.GetComponent<SpriteRenderer>();
-      var height = sprite.size;
+      var size = sprite.size;
+      var screenWidth = viewportWidth * 2;
       var screenHeight = viewportHeight * 2;
-      var scalingRatio = screenHeight / height.y;
+      var scalingRatio = Math.Max(screenWidth / size.x, screenHeight / size.y);
       sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
     }
 
@@ -141,22 +146,24 @@ public class GameplayManager : MonoBehaviour
     onDie.AddListener(() => _ = PlayerDied());
     onPostgame.AddListener(PostGame);
 
+    onReset.AddListener(() => ResetGame(true));
+    onJump.AddListener(() =>
+    {
+      if (state == GameState.Menu)
+      {
+        state = GameState.Pregame;
+        onPregame.Invoke();
+      }
+    });
+
     onMenu.Invoke();
   }
 
 
   void Update()
   {
-    if (reset!.WasPerformedThisFrame())
-    {
-      ResetGame(true);
-    }
-
-    if (jump!.WasPerformedThisFrame() && state == GameState.Menu)
-    {
-      state = GameState.Pregame;
-      onPregame.Invoke();
-    }
+    if (reset!.WasPerformedThisFrame()) onReset.Invoke();
+    if (jump!.WasPerformedThisFrame()) onJump.Invoke();
   }
   void FixedUpdate()
   {
@@ -170,7 +177,8 @@ public class GameplayManager : MonoBehaviour
 
   async Awaitable PrepareStartGame()
   {
-    await uiController!.FadeBackdrop(750, 1f, Tween.EaseOutQuint);
+    await uiController!.FadeBackdrop(1500, 1f, Tween.EaseOutQuint);
+    await Awaitable.WaitForSecondsAsync(0.5f);
     state = GameState.Playing;
     onPlay.Invoke();
     _ = uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint);
