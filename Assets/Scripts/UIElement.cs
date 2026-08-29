@@ -12,13 +12,13 @@ class UIElement : MonoBehaviour
   public void FadeIn()
   {
     if (active ?? false) return;
-    if (animator != null) { animator.FadeIn(); }
+    animator?.FadeIn();
     active = true;
   }
   public void FadeOut()
   {
     if (!active ?? false) return;
-    if (animator != null) { animator.FadeOut(); }
+    animator?.FadeOut();
     active = false;
   }
   public void FadeInImmeadiate()
@@ -34,7 +34,7 @@ class UIElement : MonoBehaviour
     active = false;
   }
 
-  void Start()
+  void Awake()
   {
     animator = GetComponents<MonoBehaviour>().OfType<IUIElementAnim>().FirstOrDefault();
   }

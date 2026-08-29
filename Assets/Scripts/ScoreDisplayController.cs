@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Coroutween;
 
@@ -27,7 +26,7 @@ public class ScoreDisplayController : MonoBehaviour
   {
     dupe.gameObject.SetActive(true);
     var startingFontSize = dupe.Size;
-    await Coroutines.RunOverTweened(250, tw =>
+    await Coroutines.RunOverTweened(500, tw =>
     {
       dupe.Size = Mathf.Lerp(startingFontSize, startingFontSize + increaseFontSizeBy, tw);
       dupe.Alpha = 1 - tw;

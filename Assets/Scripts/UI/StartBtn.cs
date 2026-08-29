@@ -5,14 +5,11 @@ public class StartBtn : MonoBehaviour, IUIElementAnim
 {
   private Vector2 originalPos;
   const float NEW_Y = -361;
-  void Start()
-  {
-    originalPos = transform.localPosition;
-  }
+  void Awake() => originalPos = transform.localPosition;
 
   public async Awaitable FadeIn()
   {
-    await Coroutines.RunOverTweened(250, (tw) =>
+    await Coroutines.RunOverTweened(1500, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
     }, Tween.EaseOutElastic);
@@ -20,7 +17,7 @@ public class StartBtn : MonoBehaviour, IUIElementAnim
 
   public async Awaitable FadeOut()
   {
-    await Coroutines.RunOverTweened(250, (tw) =>
+    await Coroutines.RunOverTweened(500, (tw) =>
     {
       transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(originalPos.y, NEW_Y, tw));
     }, Tween.EaseOutElastic);
