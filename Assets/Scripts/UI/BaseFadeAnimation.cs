@@ -11,8 +11,8 @@ public class BaseFadeAnimation : MonoBehaviour, IUIElementAnim
 
   void Awake()
   {
-    images = GetComponentsInChildren<Image>();
-    texts = GetComponentsInChildren<TextController>();
+    images = GetComponentsInChildren<Image>(true);
+    texts = GetComponentsInChildren<TextController>(true);
   }
 
   public async Awaitable FadeIn()

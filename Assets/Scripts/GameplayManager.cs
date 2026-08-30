@@ -19,6 +19,12 @@ public enum GameState
   Died = 0b0000_1000,
   Postgame = 0b0001_0000
 }
+public enum PlayerSprite
+{
+  Blossom,
+  Bubbles,
+  Buttercup
+}
 
 public class GameplayManager : MonoBehaviour
 {
@@ -57,6 +63,7 @@ public class GameplayManager : MonoBehaviour
   public AudioController? audioController;
 
   public GameObject? player;
+  public PlayerSprite playerSprite = PlayerSprite.Blossom;
   [HideInInspector]
   public Vector2 viewportSize = new();
   public float playerSpeed = 0f;
@@ -99,18 +106,21 @@ public class GameplayManager : MonoBehaviour
 
   public UnityEvent onJump = new();
   public UnityEvent onReset = new();
+  public UnityEvent onSwitchCharacter = new();
 
 
   [HideInInspector]
   public static GameplayManager? INSTANCE = null;
   private InputAction? reset;
   private InputAction? jump;
+  private InputAction? switchCharacter;
 
   void Awake()
   {
     INSTANCE = this;
     reset = InputSystem.actions.FindAction("Reset");
     jump = InputSystem.actions.FindAction("Jump");
+    switchCharacter = InputSystem.actions.FindAction("switchCharacter");
   }
 
   void Start()
@@ -163,6 +173,7 @@ public class GameplayManager : MonoBehaviour
     _ = DayNightCycle();
 
     onMenu.Invoke();
+    onSwitchCharacter.Invoke();
   }
 
 
@@ -170,6 +181,13 @@ public class GameplayManager : MonoBehaviour
   {
     if (reset!.WasPerformedThisFrame()) onReset.Invoke();
     if (jump!.WasPerformedThisFrame()) onJump.Invoke();
+
+    if (switchCharacter!.WasPerformedThisFrame() && state == GameState.Menu)
+    {
+      playerSprite = (PlayerSprite)(((byte)playerSprite + 1) % Enum.GetNames(typeof(PlayerSprite)).Length);
+      onSwitchCharacter.Invoke();
+    }
+
     ScrollLayer(dayLayer, playerDistance);
     ScrollLayer(nightLayer, playerDistance);
   }

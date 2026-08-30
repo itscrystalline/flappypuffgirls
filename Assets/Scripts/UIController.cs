@@ -30,31 +30,19 @@ public class UIController : MonoBehaviour
     manager.onMenu.AddListener(() => _ = FadeBackdrop(1000, 0.8f, Tween.EaseOutQuint));
 
     foreach (var e in uiElements)
-    {
       if (e.associatedStates.HasFlag(GameState.Menu))
-      {
         e.FadeInImmeadiate();
-      }
       else
-      {
         e.FadeOutImmeadiate();
-      }
-    }
   }
 
   void UpdateUIState()
   {
     foreach (var e in uiElements)
-    {
       if (e.associatedStates.HasFlag(manager.state))
-      {
         e.FadeIn();
-      }
       else
-      {
         e.FadeOut();
-      }
-    }
   }
 
   public async Awaitable FadeBackdrop(uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, CancellationToken cancel = default)
