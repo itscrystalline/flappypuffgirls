@@ -2138,13 +2138,16 @@ MonoBehaviour:
   nightBackgrounds:
   - {fileID: 1312987346}
   - {fileID: 1819365204}
+  backgroundParallaxFactor: 0.25
+  dayNightTransitionInterval: 30
+  dayNightFadeDuration: 2
   state: 1
   localDifficulty: 1
   playerDistance: 0
   pipeController: {fileID: 1156524152}
   uiController: {fileID: 1156524151}
   player: {fileID: 791283040}
-  viewportWidth: 0
+  viewportSize: {x: 0, y: 0}
   playerSpeed: 0
   onMenu:
     m_PersistentCalls:

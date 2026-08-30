@@ -42,7 +42,7 @@ public class PipeController : MonoBehaviour
 
   private void SpawnNextPipe()
   {
-    if (lastPipe != null && lastPipe.logicalPosition - manager!.playerDistance > manager!.viewportWidth) return;
+    if (lastPipe != null && lastPipe.logicalPosition - manager!.playerDistance > manager!.viewportSize.x) return;
     if (pipePrefabs.Length == 0) return;
 
     var pipe = Instantiate(pipePrefabs[Random.Range(0, pipePrefabs.Length)]).GetComponent<Pipe>();
@@ -50,8 +50,8 @@ public class PipeController : MonoBehaviour
     pipe.OpeningSize = manager!.DifficultyScaledRandomRange(minPipeGap, Mathf.Max(minPipeGap, pipeOpeningUpperBound), manager!.localDifficulty, true);
     if (!lastPipe)
     {
-      pipe.logicalPosition = manager!.viewportWidth;
-      pipe.transform.position = new Vector2(manager!.viewportWidth, spawnHeight);
+      pipe.logicalPosition = manager!.viewportSize.x;
+      pipe.transform.position = new Vector2(manager!.viewportSize.x, spawnHeight);
     }
     else
     {

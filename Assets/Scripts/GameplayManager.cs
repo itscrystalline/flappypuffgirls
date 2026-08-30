@@ -55,7 +55,7 @@ public class GameplayManager : MonoBehaviour
 
   public GameObject? player;
   [HideInInspector]
-  public float viewportWidth = 0.0f;
+  public Vector2 viewportSize = new();
   public float playerSpeed = 0f;
   private (SpriteRenderer sprite, float width)[] dayLayer = Array.Empty<(SpriteRenderer, float)>();
   private (SpriteRenderer sprite, float width)[] nightLayer = Array.Empty<(SpriteRenderer, float)>();
@@ -116,7 +116,7 @@ public class GameplayManager : MonoBehaviour
     var camera = Camera.main;
     var viewportHeight = camera.orthographicSize;
     var viewportWidth = viewportHeight * camera.aspect;
-    this.viewportWidth = viewportWidth;
+    viewportSize = new Vector2(viewportWidth, viewportHeight);
     Debug.Log($"camera w/h: {viewportWidth * 2} x {viewportHeight * 2}");
 
     var left = (new Vector2(-viewportWidth, -viewportHeight), new Vector2(-0.5f, viewportHeight));
@@ -212,8 +212,8 @@ public class GameplayManager : MonoBehaviour
   private (SpriteRenderer sprite, float width)[] SetupBackgroundLayer(GameObject[] backgrounds)
   {
     var layer = new (SpriteRenderer sprite, float width)[backgrounds.Length];
-    var screenWidth = viewportWidth * 2;
-    var screenHeight = viewportHeight * 2;
+    var screenWidth = viewportSize.x * 2;
+    var screenHeight = viewportSize.y * 2;
     for (int i = 0; i < backgrounds.Length; i++)
     {
       var sprite = backgrounds[i].GetComponent<SpriteRenderer>();
@@ -243,7 +243,7 @@ public class GameplayManager : MonoBehaviour
   {
     if (layer.Length == 0) return;
     var width = layer[0].width;
-    var scroll = (float)((distance * backgroundParallaxFactor) % width);
+    var scroll = (float)(distance * backgroundParallaxFactor % width);
     for (int i = 0; i < layer.Length; i++)
     {
       var position = layer[i].sprite.transform.position;
