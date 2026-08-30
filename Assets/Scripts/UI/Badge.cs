@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using Coroutween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +9,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
   private GameplayManager game;
 
   private Vector2 originalPos;
-  const float NEW_Y = 500;
+  private RectTransform rect;
+  const float NEW_Y = 300;
   [SerializeField]
   private Image[] images;
   [SerializeField]
@@ -26,10 +26,16 @@ public class Badge : MonoBehaviour, IUIElementAnim
 
   private bool textBlinking = false;
 
+  void Awake()
+  {
+    rect = GetComponent<RectTransform>();
+    originalPos = rect.anchoredPosition;
+  }
+
   void Start()
   {
     game = GameplayManager.INSTANCE;
-    originalPos = transform.localPosition;
+    originalPos = rect.anchoredPosition;
 
     game.onMenu.AddListener(() => textBlinking = false);
     game.onPregame.AddListener(() => textBlinking = false);
@@ -54,7 +60,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     _ = RunDisplay();
     await Coroutines.RunOverTweened(1500, (tw) =>
     {
-      transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
+      rect.anchoredPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
     }, Tween.EaseOutBounce);
   }
 
@@ -71,7 +77,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
       foreach (var text in texts)
         text.Alpha = alpha;
     });
-    transform.localPosition = new Vector2(originalPos.x, NEW_Y);
+    rect.anchoredPosition = new Vector2(originalPos.x, NEW_Y);
+    resetText.Alpha = 0f;
   }
 
   public void FadeInImmeadiate()
@@ -80,7 +87,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
       img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
     foreach (var text in texts)
       text.Alpha = 1f;
-    transform.localPosition = new Vector2(originalPos.x, originalPos.y);
+    rect.anchoredPosition = new Vector2(originalPos.x, originalPos.y);
   }
 
   public void FadeOutImmeadiate()
@@ -92,7 +99,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
       img.color = new Color(img.color.r, img.color.g, img.color.b, 0f);
     foreach (var text in texts)
       text.Alpha = 0f;
-    transform.localPosition = new Vector2(originalPos.x, NEW_Y);
+    rect.anchoredPosition = new Vector2(originalPos.x, NEW_Y);
+    resetText.Alpha = 0f;
   }
 
   async Awaitable RunDisplay()

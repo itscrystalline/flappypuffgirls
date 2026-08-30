@@ -4,32 +4,26 @@ using UnityEngine;
 public class StartBtn : MonoBehaviour, IUIElementAnim
 {
   private Vector2 originalPos;
-  const float NEW_Y = -361;
-  void Awake() => originalPos = transform.localPosition;
-
-  public async Awaitable FadeIn()
+  private RectTransform rect;
+  const float NEW_Y = -100;
+  void Awake()
   {
-    await Coroutines.RunOverTweened(1500, (tw) =>
-    {
-      transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
-    }, Tween.EaseOutElastic);
+    rect = GetComponent<RectTransform>();
+    originalPos = rect.anchoredPosition;
   }
 
-  public async Awaitable FadeOut()
-  {
+  public async Awaitable FadeIn() =>
+    await Coroutines.RunOverTweened(1000, (tw) =>
+    {
+      rect.anchoredPosition = new Vector2(originalPos.x, Mathf.Lerp(NEW_Y, originalPos.y, tw));
+    }, Tween.EaseOutElastic);
+
+  public async Awaitable FadeOut() =>
     await Coroutines.RunOverTweened(500, (tw) =>
     {
-      transform.localPosition = new Vector2(originalPos.x, Mathf.Lerp(originalPos.y, NEW_Y, tw));
-    }, Tween.EaseOutElastic);
-  }
+      rect.anchoredPosition = new Vector2(originalPos.x, Mathf.Lerp(originalPos.y, NEW_Y, tw));
+    }, Tween.EaseOutCubic);
 
-  public void FadeInImmeadiate()
-  {
-    transform.localPosition = new Vector2(originalPos.x, originalPos.y);
-  }
-
-  public void FadeOutImmeadiate()
-  {
-    transform.localPosition = new Vector2(originalPos.x, NEW_Y);
-  }
+  public void FadeInImmeadiate() => rect.anchoredPosition = new Vector2(originalPos.x, originalPos.y);
+  public void FadeOutImmeadiate() => rect.anchoredPosition = new Vector2(originalPos.x, NEW_Y);
 }
