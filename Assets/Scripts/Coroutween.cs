@@ -1,5 +1,8 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Coroutween
 {
@@ -35,21 +38,29 @@ namespace Coroutween
 
   }
 
+  public static class AwaitableExt
+  {
+    public static async Task AsTask(this Awaitable a) => await a;
+    public static async Task<T> AsTask<T>(this Awaitable<T> a) => await a;
+  }
+  public static class UnityEventExt
+  {
+    public static async Task AsTask(this UnityEvent a) => await a;
+  }
+
   public static class Coroutines
   {
-    public static async Awaitable RunOver(uint milliseconds, Action<float, uint> runOnProgress)
+    public static async Awaitable RunOver(uint milliseconds, Action<float, uint> runOnProgress, CancellationToken cancellationToken = default)
     {
       if (milliseconds == 0)
       {
         runOnProgress(1f, 0);
         return;
       }
-
       double start = Time.timeAsDouble;
-
       while (true)
       {
-        await Awaitable.NextFrameAsync();
+        await Awaitable.NextFrameAsync(cancellationToken);
         double elapsed = (Time.timeAsDouble - start) * 1000.0;
         if (elapsed >= milliseconds)
         {
@@ -59,10 +70,11 @@ namespace Coroutween
         runOnProgress((float)elapsed / milliseconds, (uint)elapsed);
       }
     }
-    public static async Awaitable RunOverTweened(uint milliseconds, Action<float> runOnProgressTweened, Func<float, float> tweenFunction = null)
+
+    public static async Awaitable RunOverTweened(uint milliseconds, Action<float> runOnProgressTweened, Func<float, float> tweenFunction = null, CancellationToken cancellationToken = default)
     {
       tweenFunction ??= Tween.Identity;
-      await RunOver(milliseconds, (progress, _) => runOnProgressTweened(tweenFunction(progress)));
+      await RunOver(milliseconds, (progress, _) => runOnProgressTweened(tweenFunction(progress)), cancellationToken);
     }
   }
 }
