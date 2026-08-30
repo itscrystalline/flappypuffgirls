@@ -1,0 +1,1196 @@
+fileFormatVersion: 2
+guid: 7ab31413983bcca3a9a255da690ad504
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2045215987327343823
+    second: flappypuffgirls_0
+  - first:
+      213: -3291065962353136989
+    second: flappypuffgirls_1
+  - first:
+      213: 4018176817921693795
+    second: flappypuffgirls_2
+  - first:
+      213: 6313778016960556340
+    second: flappypuffgirls_3
+  - first:
+      213: -4829866860610053162
+    second: flappypuffgirls_4
+  - first:
+      213: -9139518459222678985
+    second: flappypuffgirls_5
+  - first:
+      213: -5937446421720219758
+    second: flappypuffgirls_6
+  - first:
+      213: 5112208987793316341
+    second: flappypuffgirls_7
+  - first:
+      213: 3326058360391004904
+    second: flappypuffgirls_8
+  - first:
+      213: 4979738309256880872
+    second: flappypuffgirls_9
+  - first:
+      213: 6790589822279688314
+    second: flappypuffgirls_10
+  - first:
+      213: -1382207966324446065
+    second: flappypuffgirls_11
+  - first:
+      213: 5909181288339893394
+    second: flappypuffgirls_12
+  - first:
+      213: 8314939569007298852
+    second: flappypuffgirls_13
+  - first:
+      213: -6247026983917352172
+    second: flappypuffgirls_14
+  - first:
+      213: -4181274481966386866
+    second: flappypuffgirls_15
+  - first:
+      213: 2237533959839640679
+    second: flappypuffgirls_16
+  - first:
+      213: 6663759395117459011
+    second: flappypuffgirls_17
+  - first:
+      213: -3149628211924182209
+    second: flappypuffgirls_18
+  - first:
+      213: -3603881996018293523
+    second: flappypuffgirls_19
+  - first:
+      213: 2542970449297304718
+    second: flappypuffgirls_20
+  - first:
+      213: -8049675291566765000
+    second: flappypuffgirls_21
+  - first:
+      213: 6741897917387619589
+    second: flappypuffgirls_22
+  - first:
+      213: -5328656739205214936
+    second: flappypuffgirls_23
+  - first:
+      213: 8018992611309993045
+    second: flappypuffgirls_24
+  - first:
+      213: 7308085636910430976
+    second: flappypuffgirls_25
+  - first:
+      213: 7333793400652178732
+    second: flappypuffgirls_26
+  - first:
+      213: -1943123143759241129
+    second: flappypuffgirls_27
+  - first:
+      213: 6559532173804330775
+    second: flappypuffgirls_28
+  - first:
+      213: -3787982960276277020
+    second: flappypuffgirls_29
+  - first:
+      213: 1340223087264337948
+    second: flappypuffgirls_30
+  - first:
+      213: -639974787826867466
+    second: flappypuffgirls_31
+  - first:
+      213: -5063478111052410679
+    second: flappypuffgirls_32
+  - first:
+      213: -7960756575813204150
+    second: flappypuffgirls_33
+  - first:
+      213: -7167935199392370515
+    second: flappypuffgirls_34
+  - first:
+      213: 1491620576605127799
+    second: flappypuffgirls_35
+  - first:
+      213: 3912560104419615671
+    second: flappypuffgirls_36
+  - first:
+      213: 7379507972779291441
+    second: flappypuffgirls_37
+  - first:
+      213: -8077218378308077119
+    second: flappypuffgirls_38
+  - first:
+      213: 5287540585782645042
+    second: flappypuffgirls_39
+  - first:
+      213: 7239993582762716397
+    second: flappypuffgirls_40
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: flappypuffgirls_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 200
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 133676245eeed93e0800000000000000
+      internalID: -2045215987327343823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_1
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 152
+        width: 32
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3aaef8da1f8c352d0800000000000000
+      internalID: -3291065962353136989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_2
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 152
+        width: 39
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3689ee4d68e63c730800000000000000
+      internalID: 4018176817921693795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_3
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 152
+        width: 46
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43daa9397ab0f9750800000000000000
+      internalID: 6313778016960556340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_4
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 153
+        width: 29
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6db18e41eadd8fcb0800000000000000
+      internalID: -4829866860610053162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_5
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 152
+        width: 39
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73228e37268e92180800000000000000
+      internalID: -9139518459222678985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_6
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 152
+        width: 32
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29fb378ffe3f99da0800000000000000
+      internalID: -5937446421720219758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_7
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 152
+        width: 42
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f9dafe1df632f640800000000000000
+      internalID: 5112208987793316341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_8
+      rect:
+        serializedVersion: 2
+        x: 348
+        y: 153
+        width: 15
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e2f251e478882e20800000000000000
+      internalID: 3326058360391004904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_9
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 153
+        width: 15
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e229a5cb959b1540800000000000000
+      internalID: 4979738309256880872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_10
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 200
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a702d5c17750d3e50800000000000000
+      internalID: 6790589822279688314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_11
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 153
+        width: 43
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8c24898d2961dce0800000000000000
+      internalID: -1382207966324446065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_12
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 152
+        width: 47
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29c62e4d211a10250800000000000000
+      internalID: 5909181288339893394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_13
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 153
+        width: 15
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 429058bcb79946370800000000000000
+      internalID: 8314939569007298852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_14
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 135
+        width: 49
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b83596e0a1e49a0800000000000000
+      internalID: -6247026983917352172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_15
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 153
+        width: 14
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e41fcf1130129f5c0800000000000000
+      internalID: -4181274481966386866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_16
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 153
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76c6d1118415d0f10800000000000000
+      internalID: 2237533959839640679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_17
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 346e5ae1ddd6a7c50800000000000000
+      internalID: 6663759395117459011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_18
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 55
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3bd5b524d54a44d0800000000000000
+      internalID: -3149628211924182209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_19
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de467e63b607cfdc0800000000000000
+      internalID: -3603881996018293523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_20
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 55
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8c6ea086227a4320800000000000000
+      internalID: 2542970449297304718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_21
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83c8ce8a8fec94090800000000000000
+      internalID: -8049675291566765000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_22
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 55
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50db5dd8f68009d50800000000000000
+      internalID: 6741897917387619589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_23
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82d8ea99deecc06b0800000000000000
+      internalID: -5328656739205214936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_24
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 55
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55c3d952b4f294f60800000000000000
+      internalID: 8018992611309993045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_25
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00b3e28ba298b6560800000000000000
+      internalID: 7308085636910430976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_26
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 55
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c252af5ed3ed6c560800000000000000
+      internalID: 7333793400652178732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_27
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 89
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 750e36dbbc3a805e0800000000000000
+      internalID: -1943123143759241129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_28
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 89
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71f5a5812c3280b50800000000000000
+      internalID: 6559532173804330775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_29
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 89
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e8ff7531916e6bc0800000000000000
+      internalID: -3787982960276277020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_30
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c101b2c0ccd699210800000000000000
+      internalID: 1340223087264337948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_31
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f2af5a325a5e17f0800000000000000
+      internalID: -639974787826867466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_32
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c051c64c79eab9b0800000000000000
+      internalID: -5063478111052410679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_33
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a478c4b7216b58190800000000000000
+      internalID: -7960756575813204150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_34
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da0f23bd9e0668c90800000000000000
+      internalID: -7167935199392370515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_35
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 21
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7744630f20d43b410800000000000000
+      internalID: 1491620576605127799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_36
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 21
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b3eb427fa43c4630800000000000000
+      internalID: 3912560104419615671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_37
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 21
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1333ca62767496660800000000000000
+      internalID: 7379507972779291441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_38
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 21
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c9b0bb0ea4f7ef80800000000000000
+      internalID: -8077218378308077119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_39
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 21
+        width: 30
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 231190fe52e116940800000000000000
+      internalID: 5287540585782645042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: flappypuffgirls_40
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 21
+        width: 34
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: decedacedcf997460800000000000000
+      internalID: 7239993582762716397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      flappypuffgirls_0: -2045215987327343823
+      flappypuffgirls_1: -3291065962353136989
+      flappypuffgirls_10: 6790589822279688314
+      flappypuffgirls_11: -1382207966324446065
+      flappypuffgirls_12: 5909181288339893394
+      flappypuffgirls_13: 8314939569007298852
+      flappypuffgirls_14: -6247026983917352172
+      flappypuffgirls_15: -4181274481966386866
+      flappypuffgirls_16: 2237533959839640679
+      flappypuffgirls_17: 6663759395117459011
+      flappypuffgirls_18: -3149628211924182209
+      flappypuffgirls_19: -3603881996018293523
+      flappypuffgirls_2: 4018176817921693795
+      flappypuffgirls_20: 2542970449297304718
+      flappypuffgirls_21: -8049675291566765000
+      flappypuffgirls_22: 6741897917387619589
+      flappypuffgirls_23: -5328656739205214936
+      flappypuffgirls_24: 8018992611309993045
+      flappypuffgirls_25: 7308085636910430976
+      flappypuffgirls_26: 7333793400652178732
+      flappypuffgirls_27: -1943123143759241129
+      flappypuffgirls_28: 6559532173804330775
+      flappypuffgirls_29: -3787982960276277020
+      flappypuffgirls_3: 6313778016960556340
+      flappypuffgirls_30: 1340223087264337948
+      flappypuffgirls_31: -639974787826867466
+      flappypuffgirls_32: -5063478111052410679
+      flappypuffgirls_33: -7960756575813204150
+      flappypuffgirls_34: -7167935199392370515
+      flappypuffgirls_35: 1491620576605127799
+      flappypuffgirls_36: 3912560104419615671
+      flappypuffgirls_37: 7379507972779291441
+      flappypuffgirls_38: -8077218378308077119
+      flappypuffgirls_39: 5287540585782645042
+      flappypuffgirls_4: -4829866860610053162
+      flappypuffgirls_40: 7239993582762716397
+      flappypuffgirls_5: -9139518459222678985
+      flappypuffgirls_6: -5937446421720219758
+      flappypuffgirls_7: 5112208987793316341
+      flappypuffgirls_8: 3326058360391004904
+      flappypuffgirls_9: 4979738309256880872
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
