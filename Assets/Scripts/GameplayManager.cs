@@ -52,6 +52,7 @@ public class GameplayManager : MonoBehaviour
 
   public PipeController? pipeController;
   public UIController? uiController;
+  public AudioController? audioController;
 
   public GameObject? player;
   [HideInInspector]

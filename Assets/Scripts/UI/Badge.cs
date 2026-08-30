@@ -24,8 +24,6 @@ public class Badge : MonoBehaviour, IUIElementAnim
   public GameObject silverCoin;
   public GameObject goldCoin;
 
-  private bool textBlinking = false;
-
   void Awake()
   {
     rect = GetComponent<RectTransform>();
@@ -37,8 +35,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
     game = GameplayManager.INSTANCE;
     originalPos = rect.anchoredPosition;
 
-    game.onMenu.AddListener(() => textBlinking = false);
-    game.onPregame.AddListener(() => textBlinking = false);
+    game.onMenu.AddListener(() => resetText.gameObject.SetActive(false));
+    game.onPregame.AddListener(() => resetText.gameObject.SetActive(false));
 
     game.onJump.AddListener(() =>
     {
@@ -78,7 +76,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
         text.Alpha = alpha;
     });
     rect.anchoredPosition = new Vector2(originalPos.x, NEW_Y);
-    resetText.Alpha = 0f;
+    resetText.gameObject.SetActive(false);
   }
 
   public void FadeInImmeadiate()
@@ -88,6 +86,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     foreach (var text in texts)
       text.Alpha = 1f;
     rect.anchoredPosition = new Vector2(originalPos.x, originalPos.y);
+    _ = RunDisplay();
   }
 
   public void FadeOutImmeadiate()
@@ -100,7 +99,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     foreach (var text in texts)
       text.Alpha = 0f;
     rect.anchoredPosition = new Vector2(originalPos.x, NEW_Y);
-    resetText.Alpha = 0f;
+    resetText.gameObject.SetActive(false);
   }
 
   async Awaitable RunDisplay()
@@ -133,7 +132,7 @@ public class Badge : MonoBehaviour, IUIElementAnim
     }
     await Awaitable.WaitForSecondsAsync(0.2f);
 
-    textBlinking = true;
+    resetText.gameObject.SetActive(true);
     _ = BlinkRestartText();
   }
   async Awaitable PlaceMedal(GameObject medal)
@@ -156,16 +155,16 @@ public class Badge : MonoBehaviour, IUIElementAnim
       var twScale = Mathf.Lerp(4f, 1f, tw);
       medal.transform.localScale = new Vector2(twScale, twScale);
     }, Tween.EaseOutBounce);
+    game.audioController.PlayMedalSound();
   }
 
   async Awaitable BlinkRestartText()
   {
-    while (textBlinking)
+    while (resetText.gameObject.activeInHierarchy)
     {
       await Coroutines.RunOverTweened(500, tw => resetText.Alpha = Mathf.Lerp(0, 1f, tw));
-      if (!textBlinking) return;
+      if (!resetText.gameObject.activeInHierarchy) return;
       await Coroutines.RunOverTweened(500, tw => resetText.Alpha = Mathf.Lerp(1, 0f, tw));
     }
-    resetText.Alpha = 0f;
   }
 }
