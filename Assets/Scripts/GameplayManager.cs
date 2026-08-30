@@ -36,6 +36,13 @@ public class GameplayManager : MonoBehaviour
   private float difficultyScaledRandomBound2 = 1.3f;
   public GameObject[] dayBackgrounds = Array.Empty<GameObject>();
   public GameObject[] nightBackgrounds = Array.Empty<GameObject>();
+  [SerializeField]
+  [Range(0f, 1f)]
+  private float backgroundParallaxFactor = 0.5f;
+  [SerializeField]
+  private float dayNightTransitionInterval = 60f;
+  [SerializeField]
+  private float dayNightFadeDuration = 2f;
 
   // State
   [SerializeField]
@@ -50,6 +57,8 @@ public class GameplayManager : MonoBehaviour
   [HideInInspector]
   public float viewportWidth = 0.0f;
   public float playerSpeed = 0f;
+  private (SpriteRenderer sprite, float width)[] dayLayer = Array.Empty<(SpriteRenderer, float)>();
+  private (SpriteRenderer sprite, float width)[] nightLayer = Array.Empty<(SpriteRenderer, float)>();
 
   private uint? _highScore;
   public uint HighScore
@@ -121,15 +130,7 @@ public class GameplayManager : MonoBehaviour
       box.size = SizeOf(corners);
     }
 
-    foreach ((var bkgrnd, int idx) in dayBackgrounds.Concat(nightBackgrounds).Select((g, i) => (g, i)))
-    {
-      var sprite = bkgrnd.GetComponent<SpriteRenderer>();
-      var size = sprite.size;
-      var screenWidth = viewportWidth * 2;
-      var screenHeight = viewportHeight * 2;
-      var scalingRatio = Math.Max(screenWidth / size.x, screenHeight / size.y);
-      sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
-    }
+    SetupBackgrounds();
 
     pipeController!.onPipeCriticalPass.AddListener(() => localDifficulty *= criticalDifficultyScaleFactor);
 
@@ -156,6 +157,8 @@ public class GameplayManager : MonoBehaviour
       }
     });
 
+    _ = DayNightCycle();
+
     onMenu.Invoke();
   }
 
@@ -164,6 +167,8 @@ public class GameplayManager : MonoBehaviour
   {
     if (reset!.WasPerformedThisFrame()) onReset.Invoke();
     if (jump!.WasPerformedThisFrame()) onJump.Invoke();
+    ScrollLayer(dayLayer, playerDistance);
+    ScrollLayer(nightLayer, playerDistance);
   }
   void FixedUpdate()
   {
@@ -173,6 +178,78 @@ public class GameplayManager : MonoBehaviour
       playerSpeed = (float)(playerBaseSpeed + Math.Pow(localDifficulty, difficultySpeedScaleFactor));
     }
     playerDistance += playerSpeed * Time.fixedDeltaTime;
+  }
+
+  async Awaitable DayNightCycle()
+  {
+    var toNight = true;
+    while (true)
+    {
+      await Awaitable.WaitForSecondsAsync(dayNightTransitionInterval);
+      await CrossfadeBackgrounds(toNight);
+      toNight = !toNight;
+    }
+  }
+
+  async Awaitable CrossfadeBackgrounds(bool toNight)
+  {
+    await Coroutines.RunOverTweened((uint)(dayNightFadeDuration * 1000f), tw =>
+    {
+      var nightAlpha = toNight ? tw : 1f - tw;
+      SetLayerAlpha(dayLayer, 1f - nightAlpha);
+      SetLayerAlpha(nightLayer, nightAlpha);
+    });
+  }
+
+  private void SetupBackgrounds()
+  {
+    dayLayer = SetupBackgroundLayer(dayBackgrounds);
+    nightLayer = SetupBackgroundLayer(nightBackgrounds);
+    SetLayerAlpha(dayLayer, 1f);
+    SetLayerAlpha(nightLayer, 0f);
+  }
+
+  private (SpriteRenderer sprite, float width)[] SetupBackgroundLayer(GameObject[] backgrounds)
+  {
+    var layer = new (SpriteRenderer sprite, float width)[backgrounds.Length];
+    var screenWidth = viewportWidth * 2;
+    var screenHeight = viewportHeight * 2;
+    for (int i = 0; i < backgrounds.Length; i++)
+    {
+      var sprite = backgrounds[i].GetComponent<SpriteRenderer>();
+      var size = sprite.size;
+      var scalingRatio = Math.Max(screenWidth / size.x, screenHeight / size.y);
+      sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
+      var width = size.x * scalingRatio;
+      var position = sprite.transform.position;
+      position.x = i * width;
+      sprite.transform.position = position;
+      layer[i] = (sprite, width);
+    }
+    return layer;
+  }
+
+  private void SetLayerAlpha((SpriteRenderer sprite, float width)[] layer, float alpha)
+  {
+    foreach (var (sprite, _) in layer)
+    {
+      var color = sprite.color;
+      color.a = alpha;
+      sprite.color = color;
+    }
+  }
+
+  private void ScrollLayer((SpriteRenderer sprite, float width)[] layer, double distance)
+  {
+    if (layer.Length == 0) return;
+    var width = layer[0].width;
+    var scroll = (float)((distance * backgroundParallaxFactor) % width);
+    for (int i = 0; i < layer.Length; i++)
+    {
+      var position = layer[i].sprite.transform.position;
+      position.x = i * width - scroll;
+      layer[i].sprite.transform.position = position;
+    }
   }
 
   async Awaitable PrepareStartGame()
