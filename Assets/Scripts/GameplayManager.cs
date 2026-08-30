@@ -7,6 +7,8 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Coroutween;
 using Random = UnityEngine.Random;
+using System.Threading.Tasks;
+using System.Threading;
 
 [Flags]
 public enum GameState
@@ -255,8 +257,15 @@ public class GameplayManager : MonoBehaviour
 
   async Awaitable PrepareStartGame()
   {
-    await uiController!.FadeBackdrop(1500, 1f, Tween.EaseOutQuint);
-    await Awaitable.WaitForSecondsAsync(0.5f);
+    var cts = new CancellationTokenSource();
+    async Awaitable PrepareStartGameBefore(CancellationToken cancel)
+    {
+      await uiController!.FadeBackdrop(1500, 1f, Tween.EaseOutQuint, cancel);
+      await Awaitable.WaitForSecondsAsync(0.5f, cancel);
+    }
+
+    await Task.WhenAny(onJump.AsTask(), PrepareStartGameBefore(cts.Token).AsTask());
+    cts.Cancel();
     state = GameState.Playing;
     onPlay.Invoke();
     _ = uiController!.FadeBackdrop(250, 0f, Tween.EaseOutQuint);

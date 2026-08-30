@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Coroutween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -135,7 +136,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
     await Awaitable.WaitForSecondsAsync(0.2f);
 
     resetText.gameObject.SetActive(true);
-    _ = BlinkRestartText();
+    await Task.WhenAny(BlinkRestartText().AsTask(), game.onJump.AsTask());
+    resetText.gameObject.SetActive(false);
   }
   async Awaitable PlaceMedal(GameObject medal)
   {

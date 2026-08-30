@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Coroutween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,19 +57,20 @@ public class UIController : MonoBehaviour
     }
   }
 
-  public async Awaitable FadeBackdrop(uint milliseconds, float targetAlpha, Func<float, float> tweenFunction)
+  public async Awaitable FadeBackdrop(uint milliseconds, float targetAlpha, Func<float, float> tweenFunction, CancellationToken cancel = default)
   {
     Color startColor = backdrop.color;
     if (milliseconds == 0)
     {
       backdrop.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
-      await Awaitable.NextFrameAsync();
+      await Awaitable.NextFrameAsync(cancel);
+      return;
     }
 
     float startAlpha = backdrop.color.a;
     await Coroutines.RunOverTweened(milliseconds, tw =>
     {
       backdrop.color = new Color(startColor.r, startColor.g, startColor.b, Mathf.Lerp(startAlpha, targetAlpha, tw));
-    }, tweenFunction);
+    }, tweenFunction, cancel);
   }
 }
