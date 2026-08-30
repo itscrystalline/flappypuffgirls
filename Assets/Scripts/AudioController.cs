@@ -14,9 +14,9 @@ public class AudioController : MonoBehaviour
   public AudioClip die;
   [Range(0f, 1f)]
   public float dieVolume = 0.75f;
-  public AudioClip ding;
-  [Range(0f, 1f)]
-  public float dingVolume = 1f;
+  // public AudioClip ding;
+  // [Range(0f, 1f)]
+  // public float dingVolume = 1f;
   public AudioClip medal;
   [Range(0f, 1f)]
   public float medalVolume = 1f;
@@ -39,9 +39,21 @@ public class AudioController : MonoBehaviour
 
     manager.pipeController.onPipePass.AddListener(() => source.PlayOneShot(choose(thruPipes), thruPipesVolume));
     manager.pipeController.onPipeCriticalPass.AddListener(() => source.PlayOneShot(choose(thruPipes), thruPipesVolume));
+
+    _ = PlayWindSounds();
+  }
+
+  async Awaitable PlayWindSounds()
+  {
+    while (isActiveAndEnabled)
+    {
+      await Awaitable.WaitForSecondsAsync(Random.Range(3f, 6f));
+      source.PlayOneShot(choose(winds), windsVolume);
+    }
   }
 
   public void PlayMedalSound() => source.PlayOneShot(medal, medalVolume);
+  // public void PlayDing() => source.PlayOneShot(ding, dingVolume);
 
   AudioClip choose(AudioClip[] src) => src[Random.Range(0, src.Length)];
 }

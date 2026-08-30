@@ -2261,8 +2261,6 @@ MonoBehaviour:
   windsVolume: 1
   die: {fileID: 8300000, guid: e448d04435c77852aa930021fe1e8028, type: 3}
   dieVolume: 0.75
-  ding: {fileID: 8300000, guid: 41a2f0aa2eeb474bfaa0ca7ace08e626, type: 3}
-  dingVolume: 1
   medal: {fileID: 8300000, guid: f3952e1bf426070ac9bf84769be77317, type: 3}
   medalVolume: 1
   source: {fileID: 1156524154}

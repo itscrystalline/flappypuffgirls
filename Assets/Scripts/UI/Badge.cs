@@ -114,6 +114,8 @@ public class Badge : MonoBehaviour, IUIElementAnim
       var cnt = (uint)(max * tw);
       currentScore.Text = $"{Math.Min(cnt, curScore)}".PadLeft(8, '0');
       bestScore.Text = $"{Math.Min(cnt, highScore)}".PadLeft(8, '0');
+      //
+      // game.audioController.PlayDing();
     }, Tween.EaseOutCubic);
 
     game.HighScore = Math.Max(game.Score, game.HighScore);
