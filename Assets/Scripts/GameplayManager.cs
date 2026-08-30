@@ -36,8 +36,8 @@ public class GameplayManager : MonoBehaviour
   [SerializeField]
   [Range(0.5f, 2.0f)]
   private float difficultyScaledRandomBound2 = 1.3f;
-  public GameObject[] dayBackgrounds = Array.Empty<GameObject>();
-  public GameObject[] nightBackgrounds = Array.Empty<GameObject>();
+  public GameObject? dayBackground;
+  public GameObject? nightBackground;
   [SerializeField]
   [Range(0f, 1f)]
   private float backgroundParallaxFactor = 0.5f;
@@ -206,28 +206,33 @@ public class GameplayManager : MonoBehaviour
 
   private void SetupBackgrounds()
   {
-    dayLayer = SetupBackgroundLayer(dayBackgrounds);
-    nightLayer = SetupBackgroundLayer(nightBackgrounds);
+    dayLayer = SetupBackgroundLayer(dayBackground!);
+    nightLayer = SetupBackgroundLayer(nightBackground!);
     SetLayerAlpha(dayLayer, 1f);
     SetLayerAlpha(nightLayer, 0f);
   }
 
-  private (SpriteRenderer sprite, float width)[] SetupBackgroundLayer(GameObject[] backgrounds)
+  private (SpriteRenderer sprite, float width)[] SetupBackgroundLayer(GameObject backgroundBlueprint)
   {
-    var layer = new (SpriteRenderer sprite, float width)[backgrounds.Length];
     var screenWidth = viewportSize.x * 2;
     var screenHeight = viewportSize.y * 2;
-    for (int i = 0; i < backgrounds.Length; i++)
+    var sprite = backgroundBlueprint.GetComponent<SpriteRenderer>();
+    var size = sprite.size;
+    var scalingRatio = Math.Max(screenWidth / size.x, screenHeight / size.y);
+    sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
+    var width = size.x * scalingRatio;
+
+    var amountOfClones = (uint)Math.Ceiling(screenWidth / width) + 1;
+
+    var layer = new (SpriteRenderer sprite, float width)[amountOfClones];
+    layer[0] = (sprite, width);
+    for (int i = 1; i < amountOfClones; i++)
     {
-      var sprite = backgrounds[i].GetComponent<SpriteRenderer>();
-      var size = sprite.size;
-      var scalingRatio = Math.Max(screenWidth / size.x, screenHeight / size.y);
-      sprite.transform.localScale = new Vector2(scalingRatio, scalingRatio);
-      var width = size.x * scalingRatio;
+      var spriteNew = Instantiate(backgroundBlueprint).GetComponent<SpriteRenderer>();
       var position = sprite.transform.position;
       position.x = i * width;
-      sprite.transform.position = position;
-      layer[i] = (sprite, width);
+      spriteNew.transform.position = position;
+      layer[i] = (spriteNew, width);
     }
     return layer;
   }
