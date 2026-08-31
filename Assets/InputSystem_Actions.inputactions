@@ -127,7 +127,7 @@
                     "name": "",
                     "id": "5e5268ce-c28f-4da2-8168-206391a07d47",
                     "path": "<Touchscreen>/touch*/Press",
-                    "interactions": "",
+                    "interactions": "MultiTap",
                     "processors": "",
                     "groups": ";Touch",
                     "action": "SwitchCharacter",
