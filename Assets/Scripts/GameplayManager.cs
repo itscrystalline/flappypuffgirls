@@ -171,11 +171,18 @@ public class GameplayManager : MonoBehaviour
     });
 
     _ = DayNightCycle();
+    PullSelectedPlayer();
 
     onMenu.Invoke();
     onSwitchCharacter.Invoke();
   }
 
+  void PullSelectedPlayer()
+  {
+    onSwitchCharacter.AddListener(() => PlayerPrefs.SetInt("Player", (int)playerSprite));
+    if (PlayerPrefs.HasKey("Player"))
+      playerSprite = (PlayerSprite)PlayerPrefs.GetInt("Player");
+  }
 
   void Update()
   {

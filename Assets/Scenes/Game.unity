@@ -4075,7 +4075,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RMB/>/Two Tap
+  m_text: 'RMB/^/Two Tap
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
   m_sharedMaterial: {fileID: 6632487349039706507, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
@@ -4456,7 +4458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a0bda222b9efc91287ee302d90b8519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TextController
-  text: Playing as
+  text: RMB/^/Two Tap
 --- !u!1 &1491810926
 GameObject:
   m_ObjectHideFlags: 0
@@ -4908,7 +4910,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: RMB/>/Two Tap
+  m_text: 'RMB/^/Two Tap
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}
   m_sharedMaterial: {fileID: 6632487349039706507, guid: 57b96ed676088bb60953008f63f3bd69, type: 2}

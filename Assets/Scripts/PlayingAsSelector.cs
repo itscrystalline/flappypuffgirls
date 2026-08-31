@@ -7,31 +7,44 @@ public class PlayingAsSelector : MonoBehaviour
   public TextController characterName;
   public GameObject blossom, bubbles, buttercup;
 
+  private bool initialized = false;
+
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
     game = GameplayManager.INSTANCE;
-    game.onSwitchCharacter.AddListener(() =>
+    game.onSwitchCharacter.AddListener(UpdateSelected);
+  }
+
+  void Update()
+  {
+    if (initialized)
+      return;
+    UpdateSelected();
+    initialized = true;
+  }
+
+  void UpdateSelected()
+  {
+    switch (game.playerSprite)
     {
-      switch (game.playerSprite)
-      {
-        case PlayerSprite.Blossom:
-          blossom.SetActive(true);
-          bubbles.SetActive(false);
-          buttercup.SetActive(false);
-          break;
-        case PlayerSprite.Bubbles:
-          blossom.SetActive(false);
-          bubbles.SetActive(true);
-          buttercup.SetActive(false);
-          break;
-        case PlayerSprite.Buttercup:
-          blossom.SetActive(false);
-          bubbles.SetActive(false);
-          buttercup.SetActive(true);
-          break;
-      }
-      characterName.Text = game.playerSprite.ToString();
-    });
+      case PlayerSprite.Blossom:
+        blossom.SetActive(true);
+        bubbles.SetActive(false);
+        buttercup.SetActive(false);
+        break;
+      case PlayerSprite.Bubbles:
+        blossom.SetActive(false);
+        bubbles.SetActive(true);
+        buttercup.SetActive(false);
+        break;
+      case PlayerSprite.Buttercup:
+        blossom.SetActive(false);
+        bubbles.SetActive(false);
+        buttercup.SetActive(true);
+        break;
+    }
+    characterName.Text = game.playerSprite.ToString();
+
   }
 }
